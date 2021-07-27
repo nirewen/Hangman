@@ -62,3 +62,5 @@ const io = new Server(server, {
 io.on('connection', events)
 
 export { io }
+
+export default app
