@@ -16,7 +16,7 @@ const Home: React.FC = () => {
                 </Link>
             </Main>
             <Instructions>
-                <img src="/How to play.png" />
+                <img src="/How to play.png" alt="How to play Hangman" />
             </Instructions>
         </Container>
     )

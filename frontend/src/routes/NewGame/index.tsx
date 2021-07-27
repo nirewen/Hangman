@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useHistory } from 'react-router-dom'
+
 import api from 'services/api'
-import axios, { AxiosError } from 'axios'
 import { useUser } from 'providers/User'
 
 import Letter from 'components/Letter'
