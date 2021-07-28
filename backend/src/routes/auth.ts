@@ -12,7 +12,7 @@ const storeRedirect = (req: Request, res: Response, next: NextFunction) => {
 }
 
 router.get('/discord', storeRedirect, passport.authenticate('discord'), (req: Request, res: Response) => {
-    res.redirect(req.session.redirectTo)
+    res.redirect(`http://${req.hostname}${req.session.redirectTo}`)
 
     req.session.redirectTo = ''
 })
