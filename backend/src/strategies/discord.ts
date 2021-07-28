@@ -3,6 +3,12 @@ import DiscordStrategy from 'passport-discord'
 
 import { User } from '../database/models/User'
 
+const {
+    DISCORD_CLIENT_ID: clientID,
+    DISCORD_CLIENT_SECRET: clientSecret,
+    DISCORD_CALLBACK_URL: callbackURL,
+} = process.env
+
 const parseAvatar = (id: string, { avatar, discriminator }: DiscordStrategy.Profile, size = 2048) => {
     const root = 'https://cdn.discordapp.com/'
     let link = `${root}`
@@ -24,8 +30,6 @@ interface Environment extends NodeJS.ProcessEnv {
     CALLBACK_URL: string
 }
 
-const { CLIENT_ID, CLIENT_SECRET, CALLBACK_URL } = process.env as Environment
-
 passport.serializeUser((user, done) => {
     done(null, (user as { id: string }).id)
 })
@@ -45,9 +49,9 @@ passport.deserializeUser(async (id: string, done) => {
 passport.use(
     new DiscordStrategy(
         {
-            clientID: CLIENT_ID,
-            clientSecret: CLIENT_SECRET,
-            callbackURL: CALLBACK_URL,
+            clientID,
+            clientSecret,
+            callbackURL,
             scope: ['identify'],
         },
         async (accessToken, refreshToken, profile, done) => {
