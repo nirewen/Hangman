@@ -24,12 +24,6 @@ const parseAvatar = (id: string, { avatar, discriminator }: DiscordStrategy.Prof
     return link
 }
 
-interface Environment extends NodeJS.ProcessEnv {
-    CLIENT_ID: string
-    CLIENT_SECRET: string
-    CALLBACK_URL: string
-}
-
 passport.serializeUser((user, done) => {
     done(null, (user as { id: string }).id)
 })
