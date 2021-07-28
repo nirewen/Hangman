@@ -2,8 +2,6 @@ import React, { createContext, useContext, useState } from 'react'
 import { useEffect } from 'react'
 import api from 'services/api'
 
-import { parseAvatar } from 'utils'
-
 export interface User {
     id: string
     username: string
@@ -18,15 +16,7 @@ const UserProvider: React.FC = ({ children }) => {
 
     useEffect(() => {
         api.get('/api/user', { withCredentials: true })
-            .then(({ data }) => {
-                let { id, avatar, ...user } = data
-
-                if (!id) return
-
-                avatar = parseAvatar(id, avatar)
-
-                setUser({ id, avatar, ...user })
-            })
+            .then(({ data }) => setUser(data))
             .catch(console.error)
     }, [])
 

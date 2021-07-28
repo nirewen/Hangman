@@ -4,6 +4,21 @@ import DiscordStrategy from 'passport-discord'
 
 import { User } from '../database/models/User'
 
+const parseAvatar = (id: string, { avatar, discriminator }: DiscordStrategy.Profile, size = 2048) => {
+    const root = 'https://cdn.discordapp.com/'
+    let link = `${root}`
+
+    if (!avatar) link += `embed/avatars/${Number(discriminator) % 5}`
+    else link += `avatars/${id}/${avatar}`
+
+    if (avatar?.startsWith('a_')) link += '.gif'
+    else link += '.png'
+
+    link += `?size=${size}`
+
+    return link
+}
+
 interface Environment extends NodeJS.ProcessEnv {
     CLIENT_ID: string
     CLIENT_SECRET: string
@@ -43,13 +58,13 @@ passport.use(
             done: OAuth2Strategy.VerifyCallback
         ) => {
             try {
-                const { id, username, discriminator, avatar } = profile
+                const { id, username } = profile
+                const avatar = parseAvatar(id, profile)
 
                 let user = await User.findOneAndUpdate(
                     { id },
                     {
                         username,
-                        discriminator,
                         avatar,
                     }
                 )
@@ -57,7 +72,7 @@ passport.use(
                 if (user) {
                     return done(null, user)
                 } else {
-                    user = await User.create({ id, username, discriminator, avatar })
+                    user = await User.create({ id, username, avatar })
 
                     return done(null, user)
                 }

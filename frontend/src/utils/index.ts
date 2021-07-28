@@ -62,14 +62,3 @@ export const clean = (str: string) => {
 export const validate = (word: string) => {
     return word.replace(/[^A-Z\u00C0-\u017F]/g, '')
 }
-
-export const parseAvatar = (id: string, avatar: string, size = 2048) => {
-    let BASE_URL = `https://cdn.discordapp.com/avatars/${id}/${avatar}`
-
-    if (avatar.startsWith('a_')) BASE_URL += '.gif'
-    else BASE_URL += '.png'
-
-    BASE_URL += `?size=${size}`
-
-    return BASE_URL
-}

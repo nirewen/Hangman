@@ -17,9 +17,6 @@ const UserSchema = new Schema({
         type: String,
         required: true,
     },
-    discriminator: {
-        type: String,
-    },
     avatar: {
         type: String,
     },
