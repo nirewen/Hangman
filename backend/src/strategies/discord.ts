@@ -1,5 +1,4 @@
 import passport from 'passport'
-import OAuth2Strategy from 'passport-oauth2'
 import DiscordStrategy from 'passport-discord'
 
 import { User } from '../database/models/User'
@@ -51,12 +50,7 @@ passport.use(
             callbackURL: CALLBACK_URL,
             scope: ['identify'],
         },
-        async (
-            accessToken: string,
-            refreshToken: string,
-            profile: DiscordStrategy.Profile,
-            done: OAuth2Strategy.VerifyCallback
-        ) => {
+        async (accessToken, refreshToken, profile, done) => {
             try {
                 const { id, username } = profile
                 const avatar = parseAvatar(id, profile)
