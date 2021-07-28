@@ -6,6 +6,7 @@ import Store from 'connect-mongo'
 import { Server } from 'socket.io'
 
 import routes from './routes'
+import frontend from './frontend'
 import { connect } from './database'
 
 import events from './events/games'
@@ -48,6 +49,8 @@ app.use(
 )
 app.use(passport.initialize())
 app.use(passport.session())
+
+if (process.env.NODE_ENV === 'production') app.use(frontend)
 
 app.use('/api', routes)
 
