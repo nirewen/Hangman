@@ -9,6 +9,8 @@ export const Container = styled.nav`
     justify-content: space-between;
     background-color: rgba(0, 0, 0, 0.1);
     color: #ffffff;
+    position: sticky;
+    top: 0;
 
     .game-name {
         font-family: 'Rubik Mono One';

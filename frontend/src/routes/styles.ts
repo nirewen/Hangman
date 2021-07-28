@@ -8,4 +8,5 @@ export const Container = styled.div`
     grid-template-rows: 56px auto;
     background-color: var(--accent-bg);
     height: 100vh;
+    overflow: auto;
 `
