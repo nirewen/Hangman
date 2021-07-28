@@ -24,9 +24,9 @@ export default (socket: Socket) => {
         if (!game) return socket.emit('error', 'Game not found')
         if (!user.id) return
 
-        // if (user.id !== game.creator.id) {
-        game.addPlayer(user.id, user)
-        // }
+        if (user.id !== game.creator.id) {
+            game.addPlayer(user.id, user)
+        }
 
         socket.emit('joined')
     })
