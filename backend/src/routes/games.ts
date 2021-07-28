@@ -16,7 +16,7 @@ const genCode: () => string = () => {
 }
 
 const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
-    if (req.user) next()
+    if (req.isAuthenticated()) return next()
     else res.status(401).send({ error: 'Unauthorized' })
 }
 
