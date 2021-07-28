@@ -6,7 +6,7 @@ const { NODE_ENV } = process.env
 const SocketContext = createContext<Socket | null>(null)
 
 const SocketProvider: React.FC = ({ children }) => {
-    const socket = io(NODE_ENV !== 'production' ? 'http://localhost:3001' : window.location.href)
+    const socket = io(NODE_ENV !== 'production' ? 'http://localhost:3001' : window.location.origin)
 
     return <SocketContext.Provider value={socket}>{children}</SocketContext.Provider>
 }
