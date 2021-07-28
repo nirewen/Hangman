@@ -3,6 +3,7 @@ import { useLocation, useHistory } from 'react-router'
 
 import { useUser } from 'providers/User'
 import { useSocket } from 'providers/Socket'
+import { Container } from './styles'
 
 const Join: React.FC = () => {
     const user = useUser()
@@ -25,7 +26,7 @@ const Join: React.FC = () => {
 
     socket?.on('joined', () => history.push(`/game/${code}`))
 
-    return null
+    return <Container>Joining game {code}</Container>
 }
 
 export default Join
