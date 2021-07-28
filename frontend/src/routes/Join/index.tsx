@@ -12,6 +12,14 @@ const Join: React.FC = () => {
     const code = query.get('code')
 
     useEffect(() => {
+        let timeout = setTimeout(() => {
+            if (!user.id) history.push(`/login?redirectTo=/join?code=${code}`)
+        }, 1000)
+
+        return () => clearTimeout(timeout)
+    }, [code, history, user])
+
+    useEffect(() => {
         socket?.emit('join-game', code, user)
     }, [socket, code, user])
 
