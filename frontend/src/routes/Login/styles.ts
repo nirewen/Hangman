@@ -34,4 +34,9 @@ export const Method = styled.a<Props>`
     font-weight: 700;
     background-color: ${props => props.bg || '#000000'};
     color: ${props => props.color || '#ffffff'};
+
+    img {
+        width: 64px;
+        height: 64px;
+    }
 `

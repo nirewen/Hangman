@@ -13,6 +13,7 @@ import events from './events/games'
 
 import './strategies/discord'
 import './strategies/twitter'
+import './strategies/google'
 
 declare module 'express-session' {
     interface SessionData {
