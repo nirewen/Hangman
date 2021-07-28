@@ -69,6 +69,36 @@ export const LetterRow = styled.div`
     padding: 2.5rem 0;
 `
 
+export const KeyboardArea = styled.div`
+    display: flex;
+    flex-direction: column;
+    grid-area: keyboard;
+    align-items: center;
+    justify-content: center;
+`
+
+export const Guesses = styled.div`
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    background-color: hsl(216, 68%, 43%);
+    padding: 0.7rem 2rem 1.4rem 2rem;
+    margin-bottom: -1rem;
+    border-radius: 1rem 1rem 0 0;
+    font-family: 'Rubik Mono One';
+    color: #ffffff;
+    width: 748px;
+    gap: 12px;
+    overflow-x: clip;
+    text-overflow: ellipsis;
+    font-size: 1.5rem;
+    height: 70px;
+
+    .wrong {
+        color: hsl(45, 100%, 50%);
+    }
+`
+
 interface Props {
     game: Hangman
     user: User
@@ -101,7 +131,6 @@ const current = ({ game: { state, queue, creator }, user }: Props, then: string,
 export const KeyboardContainer = styled.div<Props>`
     display: flex;
     flex-direction: column;
-    grid-area: keyboard;
     position: relative;
     justify-self: center;
     align-self: center;

@@ -34,6 +34,8 @@ import {
     KeyboardContainer,
     State,
     GameCard,
+    Guesses,
+    KeyboardArea,
 } from './styles'
 import NewGame from 'routes/NewGame'
 
@@ -167,30 +169,39 @@ const Game: React.FC = () => {
                     </Users>
                 )}
             </RightSide>
-            <KeyboardContainer game={game} user={user}>
-                <KeyboardHeader game={game}>
-                    <Tooltip
-                        hasArrow
-                        placement="top"
-                        bg="red.600"
-                        label="You need at least 2 players to start the game"
-                        isOpen={game.queue.length < 2 && !settingWord}
-                    >
-                        <Button
-                            colorScheme="white"
-                            variant="outline"
-                            size="lg"
-                            leftIcon={<FaPlay />}
-                            style={{ gridColumn: 'span 2' }}
-                            onClick={handleStart}
-                            disabled={game.queue.length < 2}
+            <KeyboardArea>
+                <Guesses>
+                    {[...game.guesses].reverse().map((g, i) => (
+                        <span key={i} className={`${game.misses.includes(g) ? 'wrong' : 'right'}`}>
+                            {g}
+                        </span>
+                    ))}
+                </Guesses>
+                <KeyboardContainer game={game} user={user}>
+                    <KeyboardHeader game={game}>
+                        <Tooltip
+                            hasArrow
+                            placement="top"
+                            bg="red.600"
+                            label="You need at least 2 players to start the game"
+                            isOpen={game.queue.length < 2 && !settingWord}
                         >
-                            Start game
-                        </Button>
-                    </Tooltip>
-                </KeyboardHeader>
-                <Keyboard handlePlay={handlePlay} guesses={game.guesses} />
-            </KeyboardContainer>
+                            <Button
+                                colorScheme="white"
+                                variant="outline"
+                                size="lg"
+                                leftIcon={<FaPlay />}
+                                style={{ gridColumn: 'span 2' }}
+                                onClick={handleStart}
+                                disabled={game.queue.length < 2}
+                            >
+                                Start game
+                            </Button>
+                        </Tooltip>
+                    </KeyboardHeader>
+                    <Keyboard handlePlay={handlePlay} guesses={game.guesses} />
+                </KeyboardContainer>
+            </KeyboardArea>
             <Modal className="Modal" overlayClassName="Overlay" isOpen={settingWord} shouldCloseOnOverlayClick={true}>
                 <a onClick={() => setSettingWord(false)}>&times;</a>
                 <NewGame
