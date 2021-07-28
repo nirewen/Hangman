@@ -106,7 +106,7 @@ export default (socket: Socket) => {
 
             await game.next()
 
-            socket.to(code).emit('play', game)
+            socket.to(code).emit('play', user, letter)
 
             if (win) game.state.win = true
         } catch (error) {
