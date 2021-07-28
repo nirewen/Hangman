@@ -17,8 +17,30 @@ passport.use(
             callbackURL,
         },
         async (token, tokenSecret, profile, done) => {
-            console.log(profile)
-            // User.findOneAndUpdate({ twitterId: profile });
+            try {
+                const { id, username, displayName } = profile
+                const avatar = `https://unavatar.io/twitter/${username}`
+
+                let user = await User.findOneAndUpdate(
+                    { id },
+                    {
+                        username: displayName,
+                        avatar,
+                    }
+                )
+
+                if (user) {
+                    return done(null, user)
+                } else {
+                    user = await User.create({ id, username: displayName, avatar })
+
+                    return done(null, user)
+                }
+            } catch (err) {
+                console.error(err)
+
+                return done(err)
+            }
         }
     )
 )

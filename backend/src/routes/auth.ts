@@ -17,4 +17,10 @@ router.get('/discord', storeRedirect, passport.authenticate('discord'), (req: Re
     req.session.redirectTo = null
 })
 
+router.get('/twitter', storeRedirect, passport.authenticate('twitter'), (req: Request, res: Response) => {
+    res.redirect(`http://${req.hostname}${req.session.redirectTo}`)
+
+    req.session.redirectTo = null
+})
+
 export default router

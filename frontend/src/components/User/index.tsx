@@ -12,7 +12,7 @@ export interface Props {
 const User: React.FC<Props> = ({ current, username, avatar, score }) => {
     return (
         <Container className="user" current={current}>
-            <Avatar src={avatar} alt={`${username}'s avatar`} />
+            <Avatar src={avatar} alt={`${username}'s avatar`} crossOrigin="anonymous" />
             <span className="name">{username}</span>
             {!!score && <span className="score">{score}</span>}
         </Container>

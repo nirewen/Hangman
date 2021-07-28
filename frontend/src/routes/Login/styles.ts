@@ -15,6 +15,7 @@ export const Header = styled.h1`
 
 export const Methods = styled.div`
     display: flex;
+    gap: 1rem;
 `
 
 interface Props {

@@ -2,6 +2,7 @@ import React from 'react'
 import { useLocation } from 'react-router-dom'
 
 import Discord from 'icons/Discord.svg'
+import Twitter from 'icons/Twitter.svg'
 
 import { Container, Header, Method, Methods } from './styles'
 
@@ -46,6 +47,10 @@ const Login: React.FC = () => {
                 <MethodLink type="discord" bg="#5865F2">
                     <img src={Discord} alt="Discord icon" />
                     Discord
+                </MethodLink>
+                <MethodLink type="twitter" bg="#1D9BF0">
+                    <img src={Twitter} alt="Twitter icon" />
+                    Twitter
                 </MethodLink>
             </Methods>
         </Container>
