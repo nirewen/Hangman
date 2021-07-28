@@ -1,7 +1,6 @@
 import styled from 'styled-components'
 
 export const Container = styled.div`
-    /* mx-auto max-w-4xl p-12 flex flex-col min-h-full items-center */
     display: grid;
     grid-template-rows: 1fr 5fr 1fr;
     grid-area: content;
@@ -9,11 +8,11 @@ export const Container = styled.div`
     justify-content: center;
     min-height: 100%;
     gap: 3rem;
-    padding: 0 20% 3rem 20%;
+    padding: 3rem 20%;
 `
 
 export const Header = styled.h1`
-    font-weight: 600;
+    font-family: 'Rubik Mono One';
     font-size: 3rem;
     line-height: 1;
     color: #ffffff;
