@@ -2,7 +2,7 @@ import passport from 'passport'
 import OAuth2Strategy from 'passport-oauth2'
 import DiscordStrategy from 'passport-discord'
 
-import { User } from 'database/models/User'
+import { User } from '../database/models/User'
 
 interface Environment extends NodeJS.ProcessEnv {
     CLIENT_ID: string

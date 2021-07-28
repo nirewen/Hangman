@@ -1,9 +1,9 @@
 import { Request, Response, NextFunction, Router } from 'express'
-import { genId } from 'utils'
-import { Hangman } from 'structures/Hangman'
+import { genId } from '../utils'
+import { Hangman } from '../structures/Hangman'
 
-import games from 'data/games'
-import { io } from 'index'
+import games from '../data/games'
+import { io } from '../index'
 
 const router = Router()
 

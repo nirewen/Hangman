@@ -1,4 +1,4 @@
-import { Hangman } from 'structures/Hangman'
+import { Hangman } from '../structures/Hangman'
 
 const games: { [key: string]: Hangman } = {}
 

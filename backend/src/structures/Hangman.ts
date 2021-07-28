@@ -1,4 +1,4 @@
-import { IUser } from 'database/models/User'
+import { IUser } from '../database/models/User'
 import Game from './Game'
 import { GameState, PlayerError } from './types/Errors'
 import Player from './types/Player'

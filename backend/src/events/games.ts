@@ -1,10 +1,10 @@
-import { io } from 'index'
+import { io } from '../index'
 import { Socket } from 'socket.io'
 
-import games from 'data/games'
-import { IUser } from 'database/models/User'
-import { GameState, PlayerError } from 'structures/types/Errors'
-import Word from 'structures/types/Word'
+import games from '../data/games'
+import { IUser } from '../database/models/User'
+import { GameState, PlayerError } from '../structures/types/Errors'
+import Word from '../structures/types/Word'
 
 export default (socket: Socket) => {
     socket.on('join-room', (code: string, user: IUser) => {

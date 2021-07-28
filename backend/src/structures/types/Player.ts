@@ -1,4 +1,4 @@
-import { IUser } from 'database/models/User'
+import { IUser } from '../../database/models/User'
 
 class Player {
     public id: string

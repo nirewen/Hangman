@@ -5,10 +5,10 @@ import passport from 'passport'
 import Store from 'connect-mongo'
 import { Server } from 'socket.io'
 
-import routes from 'routes'
-import { connect } from 'database'
+import routes from './routes'
+import { connect } from './database'
 
-import events from 'events/games'
+import events from './events/games'
 
 declare module 'express-session' {
     interface SessionData {
@@ -18,7 +18,7 @@ declare module 'express-session' {
 
 const { PORT, SESSION_SECRET, MONGODB_URI } = process.env
 
-require('strategies/discord')
+require('./strategies/discord')
 
 connect()
 
