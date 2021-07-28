@@ -5,13 +5,15 @@ import Discord from 'icons/Discord.svg'
 
 import { Container, Header, Method, Methods } from './styles'
 
+const { ENVIRONMENT } = process.env
+
 interface Props {
     type: string
     bg?: string
 }
 
 const handleLogin = (type: string, redirectTo?: string | null) => {
-    let path = `/api/auth/${type}`
+    let path = `${ENVIRONMENT === 'production' ? '' : 'http://localhost:3001'}/api/auth/${type}`
 
     if (redirectTo) path += `?redirectTo=${redirectTo}`
 
