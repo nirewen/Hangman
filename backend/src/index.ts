@@ -21,7 +21,7 @@ const { PORT, SESSION_SECRET, MONGODB_URI } = process.env
 
 require('./strategies/discord')
 
-connect()
+const mongoClient = connect()
 
 const port = PORT || 9000
 const app = express()
@@ -43,7 +43,7 @@ app.use(
         },
         resave: false,
         saveUninitialized: false,
-        store: Store.create({ mongoUrl: MONGODB_URI! }),
+        store: Store.create({ clientPromise: mongoClient }),
         name: 'discord-token',
     })
 )
