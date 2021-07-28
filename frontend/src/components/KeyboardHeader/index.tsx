@@ -46,6 +46,13 @@ const KeyboardHeader: React.FC<Props> = ({ game: { state, queue, creator }, chil
                 </Container>
             )
         }
+
+        if (user.id === creator.id)
+            return (
+                <Container>
+                    <span>you already know the phrase, so you can't play</span>
+                </Container>
+            )
         return (
             <Container>
                 <User username={playing.user.username} avatar={playing.user.avatar} />
