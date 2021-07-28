@@ -11,15 +11,16 @@ import { connect } from './database'
 
 import events from './events/games'
 
+import './strategies/discord'
+import './strategies/twitter'
+
 declare module 'express-session' {
     interface SessionData {
         redirectTo: string
     }
 }
 
-const { PORT, SESSION_SECRET, MONGODB_URI } = process.env
-
-require('./strategies/discord')
+const { PORT, SESSION_SECRET } = process.env
 
 const mongoClient = connect()
 
