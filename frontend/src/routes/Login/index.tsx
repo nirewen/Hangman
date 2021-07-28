@@ -11,7 +11,7 @@ interface Props {
 }
 
 const handleLogin = (type: string, redirectTo?: string | null) => {
-    let path = `http://localhost:3001/api/auth/${type}`
+    let path = `${window.location.host}/api/auth/${type}`
 
     if (redirectTo) path += `?redirectTo=${redirectTo}`
 

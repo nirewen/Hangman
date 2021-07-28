@@ -17,7 +17,7 @@ const UserProvider: React.FC = ({ children }) => {
     const [user, setUser] = useState<User>({} as User)
 
     useEffect(() => {
-        api.get('http://localhost:3001/api/user', { withCredentials: true })
+        api.get('/api/user', { withCredentials: true })
             .then(({ data }) => {
                 let { id, avatar, ...user } = data
 

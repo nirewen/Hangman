@@ -5,7 +5,7 @@ import { io, Socket } from 'socket.io-client'
 const SocketContext = createContext<Socket | null>(null)
 
 const SocketProvider: React.FC = ({ children }) => {
-    const socket = io('http://localhost:3001')
+    const socket = io(window.location.href)
 
     return <SocketContext.Provider value={socket}>{children}</SocketContext.Provider>
 }
