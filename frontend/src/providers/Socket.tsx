@@ -1,12 +1,12 @@
 import React, { createContext, useContext } from 'react'
 import { io, Socket } from 'socket.io-client'
 
-const { ENVIRONMENT } = process.env
+const { NODE_ENV } = process.env
 
 const SocketContext = createContext<Socket | null>(null)
 
 const SocketProvider: React.FC = ({ children }) => {
-    const socket = io(ENVIRONMENT === 'production' ? window.location.href : 'http://localhost:3001')
+    const socket = io(NODE_ENV !== 'production' ? 'http://localhost:3001' : window.location.href)
 
     return <SocketContext.Provider value={socket}>{children}</SocketContext.Provider>
 }

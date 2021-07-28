@@ -5,7 +5,7 @@ import Discord from 'icons/Discord.svg'
 
 import { Container, Header, Method, Methods } from './styles'
 
-const { ENVIRONMENT } = process.env
+const { NODE_ENV } = process.env
 
 interface Props {
     type: string
@@ -13,7 +13,7 @@ interface Props {
 }
 
 const handleLogin = (type: string, redirectTo?: string | null) => {
-    let path = `${ENVIRONMENT === 'production' ? '' : 'http://localhost:3001'}/api/auth/${type}`
+    let path = `${NODE_ENV === 'production' ? '' : 'http://localhost:3001'}/api/auth/${type}`
 
     if (redirectTo) path += `?redirectTo=${redirectTo}`
 
