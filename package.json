@@ -6,6 +6,9 @@
   "author": "nirewen <eduardolonderovieira@gmail.com>",
   "license": "MIT",
   "private": true,
+  "scripts": {
+      "start": "node ."
+  },
   "dependencies": {
     "express": "^4.17.1"
   }
