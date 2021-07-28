@@ -46,7 +46,6 @@ app.use(
         resave: false,
         saveUninitialized: false,
         store: Store.create({ clientPromise: mongoClient }),
-        name: 'discord-token',
     })
 )
 
