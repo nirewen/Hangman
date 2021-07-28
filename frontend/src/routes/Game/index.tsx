@@ -151,22 +151,19 @@ const Game: React.FC = () => {
                 </Panel>
                 {game.queue.length > 0 && (
                     <Users>
-                        {game.queue.map((p, i) => (
-                            <React.Fragment key={i}>
-                                {i === 0 && (
-                                    <span className="title">
-                                        {!game.state.started ? 'FIRST GUESS' : game.state.win ? 'PLAYERS' : 'PLAYING'}
-                                    </span>
-                                )}
-                                {i === 1 && !game.state.win && <span className="title">NEXT UP</span>}
-                                <User
-                                    current={i === 0 && !game.state.win}
-                                    username={p.user.username}
-                                    avatar={p.user.avatar}
-                                    score={p.score}
-                                />
-                            </React.Fragment>
-                        ))}
+                        {[...game.queue]
+                            .sort((a, b) => b.score - a.score)
+                            .map((p, i) => (
+                                <React.Fragment key={i}>
+                                    {i === 0 && <span className="title">PLAYERS</span>}
+                                    <User
+                                        current={game.queue[0].id === p.id && !game.state.win}
+                                        username={p.user.username}
+                                        avatar={p.user.avatar}
+                                        score={p.score}
+                                    />
+                                </React.Fragment>
+                            ))}
                     </Users>
                 )}
             </RightSide>
