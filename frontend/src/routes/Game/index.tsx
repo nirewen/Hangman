@@ -136,7 +136,7 @@ const Game: React.FC = () => {
                     >
                         Guess phrase
                     </Button>
-                    <InviteButton link={`${window.location.host}/join?code=${code}`} />
+                    <InviteButton link={`${window.location.origin}/join?code=${code}`} />
 
                     {game.creator.id === user.id && (
                         <>
@@ -266,7 +266,7 @@ const Card: React.FC<Props> = ({ code }) => {
                 ))}
             </div>
             <div className="content options">
-                <InviteButton link={`${window.location.host}/join?code=${game.code}`} />
+                <InviteButton link={`${window.location.origin}/join?code=${game.code}`} />
                 <Button
                     colorScheme="green"
                     size="sm"
