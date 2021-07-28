@@ -11,10 +11,8 @@ const storeRedirect = (req: Request, res: Response, next: NextFunction) => {
     next()
 }
 
-router.get('/discord', storeRedirect, passport.authenticate('discord'))
-
-router.get('/discord/redirect', passport.authenticate('discord'), (req: Request, res: Response) => {
-    res.redirect('http://localhost:3000' + req.session.redirectTo)
+router.get('/discord', storeRedirect, passport.authenticate('discord'), (req: Request, res: Response) => {
+    res.redirect(req.session.redirectTo)
 
     req.session.redirectTo = ''
 })
