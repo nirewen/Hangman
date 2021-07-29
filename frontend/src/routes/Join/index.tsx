@@ -25,7 +25,7 @@ const Join: React.FC = () => {
         socket.emit('join-game', code, user)
     }, [socket, code, user])
 
-    socket.on('joined', code => history.push(`/game/${code}`))
+    socket.once('joined', code => history.push(`/game/${code}`))
 
     return (
         <Container>
