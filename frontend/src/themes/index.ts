@@ -1,0 +1,5 @@
+export { default as blue } from './blue'
+export { default as yellow } from './yellow'
+export { default as pink } from './pink'
+export { default as red } from './red'
+export { default as green } from './green'
