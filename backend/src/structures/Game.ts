@@ -1,4 +1,4 @@
-import { GameState } from './types/Errors'
+import GameState from './types/GameState'
 import Player from './types/Player'
 
 class Game {

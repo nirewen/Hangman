@@ -1,13 +1,15 @@
 import { IUser } from '../database/models/User'
 import Game from './Game'
-import { GameState, PlayerError } from './types/Errors'
+import { GameError, PlayerError } from './types/Errors'
 import Player from './types/Player'
 import Word from './types/Word'
+import GameState from './types/GameState'
 import * as Words from './types/Words'
 
 export class Hangman extends Game {
     public code: string
     public creator: Player
+    public admin: Player
     public misses: string[] = []
     public guesses: string[] = []
     public word: Word = new Word('')
@@ -17,6 +19,7 @@ export class Hangman extends Game {
 
         this.code = code
         this.creator = new Player(creator.id, creator)
+        this.admin = this.creator
         this.setWord(word)
     }
 
@@ -35,13 +38,27 @@ export class Hangman extends Game {
         this.queue.forEach(p => (p.score = 0))
     }
 
-    addPlayer(id: string, user: IUser) {
-        if (!this.queue.find(p => p.id === id)) {
-            let player = new Player(id, user)
+    removePlayer(id: string) {
+        const player = this.queue.find(p => p.socket === id)
+
+        this.queue.splice(this.queue.indexOf(player))
+    }
+
+    addPlayer(socket: string, user: IUser) {
+        const enqueued = this.queue.find(p => p.id === user.id)
+
+        if (!enqueued) {
+            let player = new Player(user.id, user)
+
+            player.socket = socket
 
             this.queue.push(player)
             return player
-        } else return null
+        } else {
+            enqueued.socket = socket
+
+            return null
+        }
     }
 
     setWord(word: string | Word) {
@@ -62,16 +79,20 @@ export class Hangman extends Game {
         }
 
         if (this.word.letters.find(l => l.valueOf() == letter)) {
-            this.word.letters.filter(l => l.valueOf() == letter).forEach(l => l.show())
-            player.score += 10
+            const guesses = this.word.letters.filter(l => l.valueOf() == letter)
+
+            guesses.forEach(l => l.show())
+
+            player.score += guesses.length
         } else this.misses.push(letter)
 
         if (this.misses.length >= 6) {
             this.word.letters.forEach(l => l.show())
 
+            this.state.lost = true
             this.state.message = 'The man was hang'
 
-            throw this.state
+            throw new GameError(this.state.message)
         }
 
         if (this.win) {

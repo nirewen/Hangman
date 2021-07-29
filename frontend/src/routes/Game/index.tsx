@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { Redirect, useHistory, useParams } from 'react-router-dom'
 import Modal from 'react-modal'
 
-import { FaPlay, FaTrash, FaChevronRight, FaPencilAlt, FaExclamationCircle } from 'react-icons/fa'
+import { IoPlay, IoTrash, IoChevronForward, IoInformationCircle, IoExit, IoEnter } from 'react-icons/io5'
+import { FaPencilAlt } from 'react-icons/fa'
 import { CgHashtag } from 'react-icons/cg'
 
 import PartyPopper from 'icons/PartyPopper.svg'
@@ -47,6 +48,7 @@ const Game: React.FC = () => {
     const history = useHistory()
     const { code }: { code: string } = useParams()
     const [game, setGame] = useState<Hangman | null>()
+    const [joined, setJoined] = useState(false)
     const [error, setError] = useState('')
     const [message, setMessage] = useState('')
     const [settingWord, setSettingWord] = useState(false)
@@ -63,9 +65,16 @@ const Game: React.FC = () => {
     useEffect(() => {
         if (code && user) {
             socket?.emit('join-room', code, user)
-            socket?.emit('fetch-state', code, user)
         }
     }, [socket, code, user])
+
+    useEffect(() => {
+        if (!game) return
+
+        const player = game.queue.find(p => p.id === user.id)
+
+        setJoined(!!player)
+    }, [game])
 
     const setWithTimeout = (value: any, update: React.SetStateAction<any>, ms = 3000) => {
         update(value)
@@ -91,6 +100,13 @@ const Game: React.FC = () => {
         await api.delete(`/api/games/${code}`, { withCredentials: true }).catch(e => e)
 
         history.push('/')
+    }
+
+    const handleJoinLeave = () => {
+        if (!game) return
+
+        if (joined) socket?.emit('leave-game', code)
+        else socket?.emit('join-game', code, user)
     }
 
     socket?.on('update', setGame)
@@ -131,13 +147,24 @@ const Game: React.FC = () => {
                 <Panel>
                     <Button
                         colorScheme="green"
-                        size="sm"
-                        leftIcon={<FaExclamationCircle />}
+                        size={game.creator.id === user.id ? 'sm' : 'lg'}
+                        leftIcon={<IoInformationCircle />}
                         onClick={() => setGuessingWord(true)}
                         disabled={(!game.state.win && !game.state.started) || user.id === game.creator.id}
+                        style={game.creator.id === user.id ? {} : { gridColumn: 'span 2' }}
                     >
                         Guess phrase
                     </Button>
+                    {game.creator.id !== user.id && (
+                        <Button
+                            colorScheme={joined ? 'red' : 'gray'}
+                            size="sm"
+                            leftIcon={joined ? <IoExit /> : <IoEnter />}
+                            onClick={handleJoinLeave}
+                        >
+                            {joined ? 'Leave game' : 'Join game'}
+                        </Button>
+                    )}
                     <InviteButton link={`${window.location.origin}/join?code=${code}`} />
 
                     {game.creator.id === user.id && (
@@ -145,7 +172,7 @@ const Game: React.FC = () => {
                             <Button size="sm" leftIcon={<FaPencilAlt />} onClick={() => setSettingWord(true)}>
                                 Set phrase
                             </Button>
-                            <Button colorScheme="red" size="sm" leftIcon={<FaTrash />} onClick={handleDelete}>
+                            <Button colorScheme="red" size="sm" leftIcon={<IoTrash />} onClick={handleDelete}>
                                 Delete
                             </Button>
                         </>
@@ -190,7 +217,7 @@ const Game: React.FC = () => {
                                 colorScheme="white"
                                 variant="outline"
                                 size="lg"
-                                leftIcon={<FaPlay />}
+                                leftIcon={<IoPlay />}
                                 style={{ gridColumn: 'span 2' }}
                                 onClick={handleStart}
                                 disabled={game.queue.length < 2}
@@ -278,7 +305,7 @@ const Card: React.FC<Props> = ({ code }) => {
                 <Button
                     colorScheme="green"
                     size="sm"
-                    rightIcon={<FaChevronRight />}
+                    rightIcon={<IoChevronForward />}
                     onClick={() => history.push(`/game/${game.code}`)}
                 >
                     View

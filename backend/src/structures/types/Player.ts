@@ -2,6 +2,7 @@ import { IUser } from '../../database/models/User'
 
 class Player {
     public id: string
+    public socket: string
     public user: IUser
     public guesses: string[]
     public score: number

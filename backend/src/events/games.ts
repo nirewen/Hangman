@@ -3,7 +3,7 @@ import { Socket } from 'socket.io'
 
 import games from '../data/games'
 import { IUser } from '../database/models/User'
-import { GameState, PlayerError } from '../structures/types/Errors'
+import { GameError, PlayerError } from '../structures/types/Errors'
 import Word from '../structures/types/Word'
 
 export default (socket: Socket) => {
@@ -24,11 +24,12 @@ export default (socket: Socket) => {
         if (!game) return socket.emit('error', 'Game not found')
         if (!user.id) return
 
-        if (user.id !== game.creator.id) {
-            game.addPlayer(user.id, user)
-        }
+        // if (user.id !== game.admin.id) {
+        game.addPlayer(socket.id, user)
+        // }
 
         socket.emit('joined')
+        io.to(code).emit('update', game)
     })
 
     socket.on('fetch', (code: string, user: IUser) => {
@@ -54,19 +55,10 @@ export default (socket: Socket) => {
 
     socket.on('fetch-games', (user: IUser) => {
         const userGames = Object.entries(games)
-            .filter(([_, game]) => game.creator.id === user.id)
+            .filter(([_, game]) => game.queue.find(p => p.id === user.id) || game.creator.id === user.id)
             .map(([_, game]) => game)
 
         socket.emit('games', userGames)
-    })
-
-    socket.on('fetch-state', (code: string, user: IUser) => {
-        const game = games[code]
-
-        if (!game) return socket.emit('error', 'Game not found')
-        if (!user.id) return
-
-        io.to(code).emit('state', game.state)
     })
 
     socket.on('set-phrase', (code: string, user: IUser, phrase: string) => {
@@ -87,8 +79,28 @@ export default (socket: Socket) => {
         io.to(code).emit('update', game)
     })
 
-    socket.on('disconnnect', () => {
-        socket.rooms.forEach(room => socket.leave(room))
+    socket.on('disconnecting', () => {
+        socket.rooms.forEach(room => {
+            socket.leave(room)
+
+            const game = games[room]
+
+            if (game) {
+                game.removePlayer(socket.id)
+
+                io.to(room).emit('update', game)
+            }
+        })
+    })
+
+    socket.on('leave-game', code => {
+        const game = games[code]
+
+        if (game) {
+            game.removePlayer(socket.id)
+
+            io.to(code).emit('update', game)
+        }
     })
 
     socket.on('play', async (code: string, { user, letter }: { user: IUser; letter: string }) => {
@@ -102,16 +114,14 @@ export default (socket: Socket) => {
         if (!game.state.started) return socket.emit('error', 'Game not started')
 
         try {
-            const win = game.play(letter)
+            game.state.win = game.play(letter)
 
             await game.next()
 
             io.to(code).emit('play', user, letter)
-
-            if (win) game.state.win = true
         } catch (error) {
             if (error instanceof PlayerError) socket.emit('error', error.message)
-            else if (error instanceof GameState) io.to(code).emit('state', { win: game.win, state: error.message })
+            if (error instanceof GameError) io.to(code).emit('error', error.message)
         }
 
         io.to(code).emit('update', game)

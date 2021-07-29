@@ -19,7 +19,7 @@ export const Container = styled.div<Props>`
 
     &:hover {
         background-color: ${({ current, theme }) =>
-            lighten(0.2, current ? theme.colors.current : theme.colors.secondary)};
+            lighten(0.03, current ? theme.colors.current : theme.colors.secondary)};
     }
 
     .name {

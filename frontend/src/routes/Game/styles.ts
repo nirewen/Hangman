@@ -108,7 +108,7 @@ interface Props {
 const current = ({ game: { state, queue, creator }, user }: Props, then: string, otherwise: string) => {
     const playing = queue[0]
 
-    if (!state.started) {
+    if (!state.started || state.lost) {
         if (user.id === creator.id) {
             if (queue.length > 0) {
                 return otherwise

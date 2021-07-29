@@ -5,6 +5,7 @@ import Word from './types/Word'
 interface Hangman extends Game {
     code: string
     creator: Player
+    admin: Player
     misses: string[]
     guesses: string[]
     word: Word
