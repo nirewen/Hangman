@@ -10,19 +10,24 @@ import { Button } from 'routes/Home/styles'
 
 import { Container } from './styles'
 import GameContext from 'providers/Game'
+import GameStateContext, { InternalState } from 'providers/GameState'
 
 const Games: React.FC = () => {
     const user = useUser()
     const socket = useSocket()
+    const [fetched, setFetched] = useState(false)
     const [games, setGames] = useState<Hangman[]>()
     const [error, setError] = useState('')
 
     useEffect(() => {
-        socket.emit('fetch-games', user)
-    }, [socket, user])
+        if (!fetched) socket.emit('fetch-games', user)
+    }, [socket, user, fetched])
 
-    socket.on('refetch', () => socket.emit('fetch-games', user))
-    socket.once('games', setGames)
+    socket.on('refetch', () => setFetched(false))
+    socket.once('games', games => {
+        setFetched(true)
+        setGames(games)
+    })
     socket.once('error', setError)
 
     if (!!error && error === 'Empty')
@@ -38,11 +43,19 @@ const Games: React.FC = () => {
     return (
         <Container>
             {games &&
-                games.map(game => (
-                    <GameContext.Provider key={game.code} value={{ code: game.code, game }}>
-                        <Card />
-                    </GameContext.Provider>
-                ))}
+                games.map(game => {
+                    const { code } = game
+                    const joined = !!game.queue.find(p => p.id === user.id)
+                    const state = { joined } as InternalState
+
+                    return (
+                        <GameContext.Provider key={game.code} value={{ code, game }}>
+                            <GameStateContext.Provider value={{ state }}>
+                                <Card />
+                            </GameStateContext.Provider>
+                        </GameContext.Provider>
+                    )
+                })}
         </Container>
     )
 }

@@ -7,7 +7,7 @@ export interface GameMessage {
 
 interface Props {
     message: GameMessage
-    setMessage(message: GameMessage): void
+    setMessage?(message: GameMessage): void
 }
 
 const GameMessageContext = createContext<Props>({} as Props)

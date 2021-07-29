@@ -15,7 +15,7 @@ const ThemeProvider: React.FC = ({ children }) => {
         if (!(themes as Themes)[theme]) {
             setTheme(themes.blue.name)
         }
-    }, [theme])
+    }, [theme, setTheme])
 
     return (
         <ThemeContext.Provider value={setTheme}>

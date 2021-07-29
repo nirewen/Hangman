@@ -20,14 +20,14 @@ const DefineModal: React.FC = () => {
 
     return (
         <Modal className="Modal" overlayClassName="Overlay" isOpen={state.defining!} shouldCloseOnOverlayClick={true}>
-            <CloseButton onClick={() => setState({ defining: false })}>&times;</CloseButton>
+            <CloseButton onClick={() => setState!({ defining: false })}>&times;</CloseButton>
             <NewGame
                 currentPhrase={game.word.word}
                 headerContent={() => <>Type the new phrase</>}
                 submitText="Set"
                 onSubmit={(phrase: string) => {
                     socket.emit('set-phrase', code, user, phrase)
-                    setState({ defining: false })
+                    setState!({ defining: false })
                 }}
             />
         </Modal>

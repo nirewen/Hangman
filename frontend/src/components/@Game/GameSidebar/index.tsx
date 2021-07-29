@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState, Dispatch, SetStateAction } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import { Button, Tooltip } from '@chakra-ui/react'
 import api from 'services/api'
@@ -15,12 +15,12 @@ import { useGameState } from 'providers/GameState'
 
 import InviteButton from '../InviteButton'
 
-import { Container, Users } from './styles'
+import { Container, Panel, Users } from './styles'
 
 const GameSidebar: React.FC = () => {
     const history = useHistory()
     const { code, game } = useGame()
-    const { state, setState } = useGameState()
+    const { setState } = useGameState()
     const user = useUser()
     const socket = useSocket()
     const [joined, setJoined] = useState(false)
@@ -30,58 +30,60 @@ const GameSidebar: React.FC = () => {
 
         if (player) setJoined(true)
         else setJoined(false)
-    }, [game])
+    }, [game, user.id])
 
     const handleJoinLeave = useCallback(() => {
         if (!game) return
 
         if (joined) socket.emit('leave-game', code)
         else socket.emit('join-game', code, user)
-    }, [game, user, socket, joined])
+    }, [code, game, user, socket, joined])
 
     const handleDelete = useCallback(() => {
         api.delete(`/api/games/${code}`, { withCredentials: true })
             .then(() => history.push('/'))
             .catch(e => e)
-    }, [history, game])
+    }, [code, history])
 
     return (
         <Container>
-            <Button
-                colorScheme="green"
-                size="sm"
-                leftIcon={<IoInformationCircle />}
-                onClick={() => setState({ guessing: true })}
-                disabled={game.state.lost || game.state.win || !game.state.started || game.admin.id === user.id}
-            >
-                Guess phrase
-            </Button>
-
-            <InviteButton link={`${window.location.origin}/join?code=${code}`} />
-
-            {game.admin.id === user.id && (
-                <Button size="sm" leftIcon={<FaPencilAlt />} onClick={() => setState({ defining: true })}>
-                    Set phrase
-                </Button>
-            )}
-
-            {game.admin.id !== user.id && (
+            <Panel>
                 <Button
-                    colorScheme={joined ? 'red' : 'gray'}
+                    colorScheme="green"
                     size="sm"
-                    leftIcon={joined ? <IoExit /> : <IoEnter />}
-                    onClick={handleJoinLeave}
-                    disabled={game.admin.id === user.id}
+                    leftIcon={<IoInformationCircle />}
+                    onClick={() => setState!({ guessing: true })}
+                    disabled={game.state.lost || game.state.win || !game.state.started || game.admin.id === user.id}
                 >
-                    {joined ? 'Leave game' : 'Join game'}
+                    Guess phrase
                 </Button>
-            )}
 
-            {game.creator.id === user.id && (
-                <Button colorScheme="red" size="sm" leftIcon={<IoTrash />} onClick={handleDelete}>
-                    Delete
-                </Button>
-            )}
+                <InviteButton link={`${window.location.origin}/join?code=${code}`} />
+
+                {game.admin.id === user.id && (
+                    <Button size="sm" leftIcon={<FaPencilAlt />} onClick={() => setState!({ defining: true })}>
+                        Set phrase
+                    </Button>
+                )}
+
+                {game.admin.id !== user.id && (
+                    <Button
+                        colorScheme={joined ? 'red' : 'gray'}
+                        size="sm"
+                        leftIcon={joined ? <IoExit /> : <IoEnter />}
+                        onClick={handleJoinLeave}
+                        disabled={game.admin.id === user.id}
+                    >
+                        {joined ? 'Leave game' : 'Join game'}
+                    </Button>
+                )}
+
+                {game.creator.id === user.id && (
+                    <Button colorScheme="red" size="sm" leftIcon={<IoTrash />} onClick={handleDelete}>
+                        Delete
+                    </Button>
+                )}
+            </Panel>
             {game.queue.length > 0 && (
                 <Users>
                     {[...game.queue]

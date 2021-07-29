@@ -8,6 +8,16 @@ export const Container = styled.div`
     grid-area: players;
 `
 
+export const Panel = styled.div`
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+
+    @media screen and (max-width: 1300px) {
+        grid-template-columns: 1fr;
+    }
+`
+
 export const Users = styled.div`
     display: flex;
     flex-direction: column;

@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useCallback } from 'react'
+import React, { useCallback } from 'react'
 import { IoPlay } from 'react-icons/io5'
 import { Button, Tooltip } from '@chakra-ui/react'
 
@@ -27,11 +27,11 @@ const KeyboardArea: React.FC = () => {
 
         if (game.queue.length < 2)
             return setWithTimeout('You need at least 2 players to begin', value => {
-                setMessage({ type: 'error', value })
+                setMessage!({ type: 'error', value })
             })
 
         socket.emit('start', code, user)
-    }, [game, socket, user])
+    }, [code, game, socket, user, setMessage])
 
     const handlePlay = useCallback(
         (letter: string) => {
@@ -39,7 +39,7 @@ const KeyboardArea: React.FC = () => {
 
             socket.emit('play', code, { user, letter })
         },
-        [game, socket, user]
+        [code, game, socket, user]
     )
 
     return (

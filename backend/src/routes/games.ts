@@ -49,7 +49,7 @@ router.delete('/:code', authMiddleware, (req: Request, res: Response) => {
 
         delete games[code]
 
-        io.emit('refetch', games)
+        io.emit('refetch')
 
         res.send({ message: 'Success' })
     }

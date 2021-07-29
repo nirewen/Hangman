@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Redirect, useHistory, useParams } from 'react-router-dom'
 
 import Hangman from 'structures/Hangman'
@@ -32,6 +32,7 @@ const Game: React.FC = () => {
     const [state, updateState] = useState<InternalState>({
         defining: false,
         guessing: false,
+        joined: false,
     })
 
     useEffect(() => {
@@ -64,7 +65,7 @@ const Game: React.FC = () => {
 
     socket.on('update', setGame)
     socket.on('delete', () => history.push('/'))
-    socket.on('message', (type, value) => setMessage({ type, value }))
+    socket.on('message', (type, value) => setMessage!({ type, value }))
 
     if (!game) {
         if (message.type === 'error' && message.value === 'Game not found') return <Redirect to="/" />

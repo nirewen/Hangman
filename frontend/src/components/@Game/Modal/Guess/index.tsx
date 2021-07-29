@@ -20,14 +20,14 @@ const GuessModal: React.FC = () => {
 
     return (
         <Modal className="Modal" overlayClassName="Overlay" isOpen={state.guessing!} shouldCloseOnOverlayClick={true}>
-            <CloseButton onClick={() => setState({ guessing: false })}>&times;</CloseButton>
+            <CloseButton onClick={() => setState!({ guessing: false })}>&times;</CloseButton>
             <NewGame
                 currentPhrase={game.word.word}
                 headerContent={() => <>What's the phrase?</>}
                 submitText="Guess"
                 onSubmit={(phrase: string) => {
                     socket.emit('guess', code, { user, phrase })
-                    setState({ guessing: false })
+                    setState!({ guessing: false })
                 }}
             />
         </Modal>

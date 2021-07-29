@@ -14,14 +14,12 @@ import InviteButton from '../InviteButton'
 
 import { useGameState } from 'providers/GameState'
 import { useSocket } from 'providers/Socket'
-import { useUser } from 'providers/User'
 
-import { Container } from './styles'
+import { Code, Container, Content } from './styles'
 
 const Card: React.FC = () => {
     const { code, game } = useGame()
     const { state } = useGameState()
-    const user = useUser()
     const socket = useSocket()
     const history = useHistory()
 
@@ -30,28 +28,28 @@ const Card: React.FC = () => {
 
         if (state.joined) socket.emit('leave-game', code)
         else api.delete(`/api/games/${code}`, { withCredentials: true }).catch(e => e)
-    }, [code, game, user, socket, state])
+    }, [code, game, socket, state])
 
     return (
         <Container>
-            <span className="code">
+            <Code>
                 <CgHashtag strokeWidth={0.5} />
                 {game.code}
-            </span>
-            <div className="content word">
+            </Code>
+            <Content className="word">
                 {game.word.letters.map((l, i) => {
                     if (l.letter === '\u3000') return <Space key={i} />
                     return <Letter key={i}>{!l.hidden ? l.letter : '\u00a0'}</Letter>
                 })}
-            </div>
-            <div className="content players">
+            </Content>
+            <Content className="players">
                 {game.queue.map((p, i) => (
                     <Tooltip key={p.id} hasArrow label={p.user.username} placement="top">
                         <img className={`player${i === 0 ? ' current' : ''}`} src={p.user.avatar} />
                     </Tooltip>
                 ))}
-            </div>
-            <div className="content options">
+            </Content>
+            <Content className="options">
                 <InviteButton link={`${window.location.origin}/join?code=${game.code}`} />
                 <Button
                     colorScheme="green"
@@ -69,7 +67,7 @@ const Card: React.FC = () => {
                 >
                     {state.joined ? 'Leave' : 'Delete'}
                 </Button>
-            </div>
+            </Content>
         </Container>
     )
 }

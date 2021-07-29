@@ -8,7 +8,7 @@ export interface InternalState {
 
 interface Props {
     state: InternalState
-    setState(state: InternalState): void
+    setState?(state: InternalState): void
 }
 
 const GameStateContext = createContext<Props>({} as Props)
