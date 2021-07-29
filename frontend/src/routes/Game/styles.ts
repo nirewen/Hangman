@@ -140,7 +140,7 @@ export const KeyboardContainer = styled.div<Props>`
     border-radius: 1rem;
     gap: 1rem;
     width: max-content;
-    background-color: ${props => current(props, props.theme.colors.current, shade(0.4, props.theme.colors.secondary))};
+    background-color: ${props => current(props, props.theme.colors.current, shade(0.3, props.theme.colors.secondary))};
 
     .keyboard {
         opacity: ${props => current(props, '1', '0.3')};
@@ -158,10 +158,10 @@ export const Users = styled.div`
     gap: 5px;
     padding: 0.5rem;
     border-radius: 5px;
-    background-color: rgba(0, 0, 0, 0.1);
+    background-color: ${({ theme }) => shade(0.1, theme.colors.primary)};
 
     .title {
-        color: rgba(255, 255, 255, 0.8);
+        color: ${({ theme }) => shade(0.2, theme.colors.text)};
         font-weight: 700;
         font-size: 0.8rem;
     }

@@ -134,7 +134,7 @@ const Game: React.FC = () => {
                         size="sm"
                         leftIcon={<FaExclamationCircle />}
                         onClick={() => setGuessingWord(true)}
-                        disabled={!game.state.started || user.id === game.creator.id}
+                        disabled={(!game.state.win && !game.state.started) || user.id === game.creator.id}
                     >
                         Guess phrase
                     </Button>

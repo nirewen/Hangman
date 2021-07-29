@@ -1,3 +1,4 @@
+import { shade } from 'polished'
 import styled from 'styled-components'
 
 export const Container = styled.div`
@@ -21,6 +22,6 @@ export const Container = styled.div`
     gap: 8px;
 
     .user {
-        --luminance: 45%;
+        background-color: ${({ theme }) => shade(0.1, theme.colors.secondary)};
     }
 `
