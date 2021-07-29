@@ -1,6 +1,6 @@
 import React from 'react'
 
-import Key from 'components/Key'
+import Key from './Key'
 
 import { clean } from 'utils'
 
@@ -8,7 +8,7 @@ import { Container, KeyRow } from './styles'
 
 interface Props {
     guesses: string[]
-    handlePlay: (letter: string) => Promise<void>
+    handlePlay(letter: string): void
 }
 
 const Keyboard: React.FC<Props> = ({ guesses, handlePlay }) => {

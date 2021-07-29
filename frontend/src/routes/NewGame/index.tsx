@@ -5,8 +5,8 @@ import api from 'services/api'
 import { useUser } from 'providers/User'
 import { useSocket } from 'providers/Socket'
 
-import Letter from 'components/Letter'
-import Space from 'components/Space'
+import Letter from 'components/@Game/Letter'
+import Space from 'components/@Game/Space'
 
 import { Container, CreateButton, Header, LetterRow, Letters, PhraseInput } from './styles'
 
@@ -14,7 +14,7 @@ interface Props {
     headerContent?: React.FC
     submitText?: string
     currentPhrase?: string
-    onSubmit?: (phrase: string) => Promise<void>
+    onSubmit?(phrase: string): void
 }
 
 const NewGame: React.FC<Props> = ({ headerContent: HeaderContent, submitText, currentPhrase, onSubmit }) => {
