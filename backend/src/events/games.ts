@@ -88,7 +88,8 @@ export default (socket: Socket) => {
             .filter(([_, game]) => game.queue.find(p => p.id === user.id) || game.admin.id === user.id)
             .map(([_, game]) => game)
 
-        socket.emit('games', userGames)
+        if (userGames.length > 0) return socket.emit('games', userGames)
+        else return socket.emit('error', 'Empty')
     })
 
     socket.on('set-phrase', (code: string, user: IUser, phrase: string) => {
@@ -141,6 +142,7 @@ export default (socket: Socket) => {
 
             game.removePlayer(socket.id)
 
+            io.emit('refetch')
             io.to(code).emit('update', game)
             socket.emit('left')
         }

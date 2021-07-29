@@ -193,6 +193,7 @@ export const GameCard = styled.div`
     color: ${({ theme }) => theme.colors.text};
     gap: 1rem;
     margin-top: 2rem;
+    width: 100%;
 
     .code {
         display: flex;

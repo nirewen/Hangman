@@ -40,11 +40,19 @@ router.delete('/:code', authMiddleware, (req: Request, res: Response) => {
     if (!game) return res.status(404).send({ error: 'Game not found' })
 
     // @ts-ignore
-    if (game.creator.id === req.user?.id) delete games[code]
+    if (game.creator.id === req.user?.id) {
+        io.sockets.sockets.get(game.creator.socket).leave(code)
 
-    io.to(code).emit('delete')
+        io.to(code).emit('delete')
 
-    res.send({ message: 'Success' })
+        io.sockets.sockets.forEach(socket => socket.leave(code))
+
+        delete games[code]
+
+        io.emit('refetch', games)
+
+        res.send({ message: 'Success' })
+    }
 })
 
 export default router

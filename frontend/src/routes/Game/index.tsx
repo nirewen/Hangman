@@ -295,12 +295,25 @@ const Card: React.FC<Props> = ({ code }) => {
     const socket = useSocket()
     const history = useHistory()
     const [game, setGame] = useState<Hangman | null>()
+    const [joined, setJoined] = useState(false)
 
     useEffect(() => {
         if (code && user) {
             socket.emit('fetch', code, user)
         }
     }, [socket, code, user])
+
+    useEffect(() => {
+        if (game?.queue.find(p => p.id === user.id)) setJoined(true)
+        else setJoined(false)
+    }, [game])
+
+    const handleDeleteLeave = useCallback(() => {
+        if (!game) return
+
+        if (joined) socket.emit('leave-game', code)
+        else api.delete(`/api/games/${code}`, { withCredentials: true }).catch(e => e)
+    }, [code, user, socket, joined, game])
 
     socket.on('update', game => game.code === code && setGame(game))
 
@@ -339,6 +352,14 @@ const Card: React.FC<Props> = ({ code }) => {
                     onClick={() => history.push(`/game/${game.code}`)}
                 >
                     View
+                </Button>
+                <Button
+                    colorScheme="red"
+                    size="sm"
+                    rightIcon={joined ? <IoExit /> : <IoTrash />}
+                    onClick={handleDeleteLeave}
+                >
+                    {joined ? 'Leave' : 'Delete'}
                 </Button>
             </div>
         </GameCard>
