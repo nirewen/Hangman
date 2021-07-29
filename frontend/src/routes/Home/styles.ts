@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import { shade } from 'polished'
 
 export const Container = styled.div`
     display: flex;
@@ -19,10 +20,10 @@ export const Main = styled.main`
 export const Header = styled.h1`
     display: flex;
     flex-direction: column;
-    font-family: 'Rubik Mono One';
+    font-family: ${({ theme }) => theme.fonts.default};
     font-size: 3rem;
     text-align: center;
-    color: #ffffff;
+    color: ${({ theme }) => theme.colors.text};
 
     span {
         font-size: 6rem;
@@ -36,15 +37,15 @@ export const Instructions = styled.div`
     justify-content: center;
     width: 100%;
     padding: 1rem 0;
-    background-color: rgba(0, 0, 0, 0.05);
+    background-color: ${({ theme }) => shade(0.05, theme.colors.primary)};
 `
 
 export const Button = styled.h3`
     font-size: 2rem;
     padding: 1rem 2rem;
-    background-color: rgba(0, 0, 0, 0.1);
-    font-family: 'Rubik Mono One';
-    color: #ffffff;
+    background-color: ${({ theme }) => shade(0.1, theme.colors.primary)};
+    font-family: ${({ theme }) => theme.fonts.default};
+    color: ${({ theme }) => theme.colors.text};
     border-radius: 1rem;
 `
 
@@ -55,8 +56,8 @@ export const Footer = styled.div`
     padding: 1rem 0;
     margin-top: -3rem;
     font-weight: 700;
-    color: #ffffff;
-    background-color: rgba(0, 0, 0, 0.1);
+    color: ${({ theme }) => theme.colors.text};
+    background-color: ${({ theme }) => shade(0.1, theme.colors.primary)};
     width: 100%;
     gap: 18px;
 
@@ -75,7 +76,7 @@ export const Footer = styled.div`
 
     a {
         padding: 5px 10px;
-        background-color: rgba(0, 0, 0, 0.1);
+        background-color: ${({ theme }) => shade(0.2, theme.colors.primary)};
         border-radius: 8px;
 
         .avatar {
@@ -87,7 +88,7 @@ export const Footer = styled.div`
             height: 14px;
 
             g[data-name='Wordmark'] {
-                fill: #ffffff;
+                fill: ${({ theme }) => theme.colors.text};
             }
         }
     }

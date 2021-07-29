@@ -1,5 +1,6 @@
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
+import { shade } from 'polished'
 
 export const Container = styled.nav`
     display: flex;
@@ -7,13 +8,13 @@ export const Container = styled.nav`
     grid-area: navbar;
     padding: 10px 4rem;
     justify-content: space-between;
-    background-color: rgba(0, 0, 0, 0.1);
-    color: #ffffff;
+    background-color: ${({ theme }) => shade(0.1, theme.colors.primary)};
+    color: ${({ theme }) => theme.colors.text};
     position: sticky;
     top: 0;
 
     .game-name {
-        font-family: 'Rubik Mono One';
+        font-family: ${({ theme }) => theme.fonts.default};
         font-size: 1.2rem;
     }
 `
@@ -24,7 +25,7 @@ export const UserInfo = styled(Link)`
     gap: 8px;
     font-weight: 700;
     padding: 8px 10px;
-    background-color: rgba(0, 0, 0, 0.1);
+    background-color: ${({ theme }) => shade(0.2, theme.colors.primary)};
     border-radius: 10px;
     cursor: pointer;
 

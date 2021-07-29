@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import { shade } from 'polished'
 
 export const Container = styled.div`
     display: flex;
@@ -10,7 +11,7 @@ export const Container = styled.div`
 export const Header = styled.h1`
     font-size: 2rem;
     font-weight: 700;
-    color: #ffffff;
+    color: ${({ theme }) => theme.colors.text};
 `
 
 export const Methods = styled.div`
@@ -32,8 +33,8 @@ export const Method = styled.a<Props>`
     border-radius: 15px;
     font-size: 1.2rem;
     font-weight: 700;
-    background-color: ${props => props.bg || '#000000'};
-    color: ${props => props.color || '#ffffff'};
+    background-color: ${props => props.bg || shade(0.5, props.theme.colors.primary)};
+    color: ${props => props.color || props.theme.colors.text};
 
     img {
         width: 64px;

@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import { shade } from 'polished'
 
 export const Container = styled.div`
     display: grid;
@@ -12,7 +13,7 @@ export const Container = styled.div`
 `
 
 export const Header = styled.h1`
-    font-family: 'Rubik Mono One';
+    font-family: ${({ theme }) => theme.fonts.default};
     font-size: 3rem;
     line-height: 1;
     color: #ffffff;
@@ -31,8 +32,8 @@ export const LetterRow = styled.div`
     display: flex;
     flex: 0;
     flex-wrap: wrap;
-    font-family: 'Roboto Mono';
-    color: #ffffff;
+    font-family: ${({ theme }) => theme.fonts.mono};
+    color: ${({ theme }) => theme.colors.text};
     text-transform: uppercase;
     font-size: 4rem;
     justify-content: center;
@@ -46,12 +47,12 @@ export const PhraseInput = styled.textarea`
 
 export const CreateButton = styled.button`
     padding: 1.25rem 4rem;
-    color: #ffffff;
+    color: ${({ theme }) => theme.colors.text};
     border-radius: 0.7rem;
     font-size: 2rem;
     font-weight: 800;
     text-transform: uppercase;
     width: max-content;
-    background-color: rgba(0, 0, 0, 0.1);
+    background-color: ${({ theme }) => shade(0.1, theme.colors.primary)};
     justify-self: center;
 `

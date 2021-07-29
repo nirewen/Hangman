@@ -16,37 +16,40 @@ import SocketProvider from 'providers/Socket'
 import GlobalStyle from './styles'
 
 import { ChakraProvider } from '@chakra-ui/react'
+import ThemeProvider from 'providers/Theme'
 
 ReactDOM.render(
     <React.StrictMode>
         <ChakraProvider>
-            <GlobalStyle />
-            <UserProvider>
-                <SocketProvider>
-                    <Router>
-                        <Switch>
-                            <Route path="/" exact>
-                                <Page component={Home} />
-                            </Route>
-                            <Route path="/login" exact>
-                                <Page component={Login} />
-                            </Route>
-                            <Route path="/join" exact>
-                                <Page component={Join} />
-                            </Route>
-                            <Route path="/new" exact>
-                                <Page component={NewGame} />
-                            </Route>
-                            <Route path="/game/:code" exact>
-                                <Page component={Game} />
-                            </Route>
-                            <Route path="/games" exact>
-                                <Page component={Games} />
-                            </Route>
-                        </Switch>
-                    </Router>
-                </SocketProvider>
-            </UserProvider>
+            <ThemeProvider>
+                <GlobalStyle />
+                <UserProvider>
+                    <SocketProvider>
+                        <Router>
+                            <Switch>
+                                <Route path="/" exact>
+                                    <Page component={Home} />
+                                </Route>
+                                <Route path="/login" exact>
+                                    <Page component={Login} />
+                                </Route>
+                                <Route path="/join" exact>
+                                    <Page component={Join} />
+                                </Route>
+                                <Route path="/new" exact>
+                                    <Page component={NewGame} />
+                                </Route>
+                                <Route path="/game/:code" exact>
+                                    <Page component={Game} />
+                                </Route>
+                                <Route path="/games" exact>
+                                    <Page component={Games} />
+                                </Route>
+                            </Switch>
+                        </Router>
+                    </SocketProvider>
+                </UserProvider>
+            </ThemeProvider>
         </ChakraProvider>
     </React.StrictMode>,
     document.getElementById('root')

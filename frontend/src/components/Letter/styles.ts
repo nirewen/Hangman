@@ -5,7 +5,7 @@ export const Container = styled.span`
     align-items: center;
     justify-content: center;
     font-family: 'Roboto Mono';
-    border-bottom: 4px solid #ffffff;
+    border-bottom: 4px solid ${({ theme }) => theme.colors.text};
     margin: 0 0.25rem;
     padding: 4px 0.1em;
     text-align: center;

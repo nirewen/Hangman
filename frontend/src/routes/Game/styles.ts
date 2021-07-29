@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 import { User } from 'providers/User'
 import Hangman from 'structures/Hangman'
+import { shade } from 'polished'
 
 export const Container = styled.div`
     display: grid;
@@ -60,7 +61,7 @@ export const LetterRow = styled.div`
     font-family: 'Roboto Mono';
     text-transform: uppercase;
     font-size: 3rem;
-    color: #ffffff;
+    color: ${({ theme }) => theme.colors.text};
     line-height: 1;
     align-items: center;
     justify-content: center;
@@ -81,12 +82,12 @@ export const Guesses = styled.div`
     display: flex;
     flex-direction: row-reverse;
     align-items: center;
-    background-color: hsl(216, 68%, 43%);
+    background-color: ${({ theme }) => shade(0.2, theme.colors.primary)};
     padding: 0.7rem 2rem 1.4rem 2rem;
     margin-bottom: -1rem;
     border-radius: 1rem 1rem 0 0;
     font-family: 'Rubik Mono One';
-    color: #ffffff;
+    color: ${({ theme }) => theme.colors.text};
     width: 748px;
     gap: 12px;
     overflow-x: clip;
@@ -139,7 +140,7 @@ export const KeyboardContainer = styled.div<Props>`
     border-radius: 1rem;
     gap: 1rem;
     width: max-content;
-    background-color: ${props => current(props, 'hsl(148, 48%, 43%)', 'hsl(216, 15%, 30%)')};
+    background-color: ${props => current(props, props.theme.colors.current, shade(0.4, props.theme.colors.secondary))};
 
     .keyboard {
         opacity: ${props => current(props, '1', '0.3')};
@@ -175,7 +176,7 @@ export const State = styled.div<{ bg?: number[] }>`
     gap: 10px;
     padding: 0.75rem 1.5rem;
     font-size: 1.5rem;
-    color: #ffffff;
+    color: ${({ theme }) => theme.colors.text};
     background: hsl(var(--bg));
     font-weight: 700;
     border-radius: 1rem;
@@ -187,9 +188,9 @@ export const GameCard = styled.div`
     position: relative;
     padding: 1rem;
     grid-template-areas: 'word word players players options';
-    background-color: rgb(35, 94, 182);
+    background-color: ${({ theme }) => shade(0.2, theme.colors.primary)};
     border-radius: 0 0.5rem 0.5rem 0.5rem;
-    color: #ffffff;
+    color: ${({ theme }) => theme.colors.text};
     gap: 1rem;
     margin-top: 2rem;
 
@@ -201,7 +202,7 @@ export const GameCard = styled.div`
         padding: 8px;
         height: max-content;
         width: max-content;
-        background-color: rgb(35, 94, 182);
+        background-color: ${({ theme }) => shade(0.2, theme.colors.primary)};
         border-radius: 8px 8px 0 0;
         font-weight: 700;
         top: -2rem;
@@ -234,7 +235,7 @@ export const GameCard = styled.div`
                 width: 40px;
                 height: 40px;
                 border-radius: 50%;
-                box-shadow: 0 0 0 4px rgb(35, 94, 182);
+                box-shadow: 0 0 0 4px ${({ theme }) => shade(0.2, theme.colors.primary)};
 
                 &.current {
                     box-shadow: 0 0 0 4px rgb(57, 162, 106);

@@ -1,25 +1,25 @@
 import styled from 'styled-components'
+import { lighten, shade } from 'polished'
 
 interface Props {
     current?: boolean
 }
 
 export const Container = styled.div<Props>`
-    --luminance: 52%;
-    --current-luminance: 43%;
+    --color: ${props => (props.current ? props.theme.colors.current : props.theme.colors.secondary)};
 
     display: flex;
     padding: 5px 10px;
     border-radius: 5px;
-    background-color: ${props =>
-        props.current ? 'hsl(148, 48%, var(--current-luminance))' : 'hsl(216, 15%, var(--luminance))'};
-    color: #ffffff;
+    background-color: ${({ current, theme }) => (current ? theme.colors.current : theme.colors.secondary)};
+    color: ${({ theme }) => theme.colors.text};
     gap: 5px;
     align-items: center;
     cursor: default;
 
     &:hover {
-        --luminance: ;
+        background-color: ${({ current, theme }) =>
+            lighten(0.2, current ? theme.colors.current : theme.colors.secondary)};
     }
 
     .name {
@@ -32,10 +32,8 @@ export const Container = styled.div<Props>`
     .score {
         padding: 0 6px;
         border-radius: 5px;
-        background-color: ${props =>
-            props.current
-                ? 'hsl(148, 48%, calc(var(--current-luminance) - 5%))'
-                : 'hsl(216, 15%, calc(var(--luminance) - 5%))'};
+        background-color: ${({ current, theme }) =>
+            shade(0.2, current ? theme.colors.current : theme.colors.secondary)};
         margin-left: auto;
     }
 `

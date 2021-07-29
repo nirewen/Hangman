@@ -1,16 +1,9 @@
 import { createGlobalStyle } from 'styled-components'
 
 export default createGlobalStyle`
-    :root {
-        --accent-bg: #2769cb;
-    }
-
-    html, body {
+    * {
         padding: 0;
         margin: 0;
-    }
-    
-    *, input, button {
         box-sizing: border-box;
     }
 

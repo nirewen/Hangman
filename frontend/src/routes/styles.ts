@@ -6,7 +6,7 @@ export const Container = styled.div`
         'navbar'
         'content';
     grid-template-rows: 56px auto;
-    background-color: var(--accent-bg);
+    background-color: ${({ theme }) => theme.colors.primary};
     height: 100vh;
     overflow: auto;
 `

@@ -6,6 +6,6 @@ export const Container = styled.div`
     align-items: center;
     font-size: 2rem;
     font-weight: 600;
-    color: #ffffff;
+    color: ${({ theme }) => theme.colors.text};
     padding: 2rem 20%;
 `
