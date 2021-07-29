@@ -238,7 +238,7 @@ export const GameCard = styled.div`
                 box-shadow: 0 0 0 4px ${({ theme }) => shade(0.2, theme.colors.primary)};
 
                 &.current {
-                    box-shadow: 0 0 0 4px rgb(57, 162, 106);
+                    box-shadow: 0 0 0 4px ${({ theme }) => theme.colors.current};
                 }
             }
             .player + .player {
