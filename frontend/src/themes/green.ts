@@ -1,5 +1,5 @@
 export default {
-    name: 'red',
+    name: 'green',
 
     colors: {
         primary: 'hsl(123, 44%, 34%)',

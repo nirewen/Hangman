@@ -4,7 +4,6 @@ import { shade } from 'polished'
 
 export const Container = styled.nav`
     display: flex;
-    align-items: center;
     grid-area: navbar;
     padding: 10px 4rem;
     justify-content: space-between;
@@ -12,6 +11,12 @@ export const Container = styled.nav`
     color: ${({ theme }) => theme.colors.text};
     position: sticky;
     top: 0;
+
+    > div {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+    }
 
     .game-name {
         font-family: ${({ theme }) => theme.fonts.default};
