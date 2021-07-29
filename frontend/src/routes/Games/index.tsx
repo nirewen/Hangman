@@ -13,10 +13,10 @@ const Games: React.FC = () => {
     const [games, setGames] = useState<Hangman[]>()
 
     useEffect(() => {
-        socket?.emit('fetch-games', user)
+        socket.emit('fetch-games', user)
     }, [socket, user])
 
-    socket?.on('games', setGames)
+    socket.on('games', setGames)
 
     return <Container>{games && games.map(game => <Card key={game.code} code={game.code} />)}</Container>
 }

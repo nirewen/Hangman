@@ -3,7 +3,6 @@ import mongoose, { Document, model, Model, Schema } from 'mongoose'
 export interface IUser extends Document {
     id: string
     username: string
-    discriminator: string
     avatar: string
 }
 

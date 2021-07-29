@@ -21,13 +21,13 @@ const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
 }
 
 router.post('/', authMiddleware, (req: Request, res: Response) => {
-    const { phrase, user } = req.body
+    const { phrase, user, socket } = req.body
 
     if (!phrase) return res.status(400).send({ error: 'Missing phrase' })
 
     const code = genCode()
 
-    games[code] = new Hangman(code, user, phrase)
+    games[code] = new Hangman(code, socket, user, phrase)
 
     res.send(games[code])
 })

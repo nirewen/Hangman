@@ -28,17 +28,47 @@ export default (socket: Socket) => {
         game.addPlayer(socket.id, user)
         // }
 
-        socket.emit('joined')
+        socket.emit('joined', code)
         io.to(code).emit('update', game)
     })
 
-    socket.on('fetch', (code: string, user: IUser) => {
+    socket.on('fetch', (code: string) => {
+        const game = games[code]
+
+        if (!game) return socket.emit('error', 'Game not found')
+
+        socket.emit('update', game)
+    })
+
+    socket.on('set-admin', (code: string, user: IUser, id: string) => {
         const game = games[code]
 
         if (!game) return socket.emit('error', 'Game not found')
         if (!user.id) return
 
-        socket.emit('update', game)
+        if (!(game.admin.id === user.id || game.creator.id === user.id))
+            return socket.emit('error', 'You are not the admin of the game')
+
+        game.setAdmin(id)
+
+        io.to(code).emit('update', game)
+    })
+
+    socket.on('kick', (code: string, user: IUser, id: string) => {
+        const game = games[code]
+
+        if (!game) return socket.emit('error', 'Game not found')
+        if (!user.id) return
+
+        const kicked = game.queue.find(p => p.id === id)
+
+        if (!kicked) return socket.emit('error', 'Player not found')
+
+        game.removePlayer(kicked.socket)
+
+        io.to(kicked.socket).emit('left')
+
+        io.to(code).emit('update', game)
     })
 
     socket.on('start', (code: string, user: IUser) => {
@@ -55,7 +85,7 @@ export default (socket: Socket) => {
 
     socket.on('fetch-games', (user: IUser) => {
         const userGames = Object.entries(games)
-            .filter(([_, game]) => game.queue.find(p => p.id === user.id) || game.creator.id === user.id)
+            .filter(([_, game]) => game.queue.find(p => p.id === user.id) || game.admin.id === user.id)
             .map(([_, game]) => game)
 
         socket.emit('games', userGames)
@@ -66,12 +96,12 @@ export default (socket: Socket) => {
 
         if (!game) return socket.emit('error', 'Game not found')
         if (!user.id) return
-        if (user.id !== game.creator.id) return
+        if (user.id !== game.admin.id) return
 
         const newPhrase = new Word(phrase)
 
         if (newPhrase.word !== game.word.word) io.to(code).emit('message', 'Phrase updated')
-        else io.to(code).emit('message', 'Game reset')
+        else if (game.state.started) io.to(code).emit('message', 'Game reset')
 
         game.reset()
         game.setWord(newPhrase)
@@ -80,15 +110,21 @@ export default (socket: Socket) => {
     })
 
     socket.on('disconnecting', () => {
-        socket.rooms.forEach(room => {
-            socket.leave(room)
+        socket.rooms.forEach(code => {
+            socket.leave(code)
 
-            const game = games[room]
+            const game = games[code]
 
             if (game) {
+                if (game.creator.socket === socket.id) {
+                    if (game.creator.id !== game.admin.id) {
+                        game.creator = game.admin
+                    }
+                }
+
                 game.removePlayer(socket.id)
 
-                io.to(room).emit('update', game)
+                io.to(code).emit('update', game)
             }
         })
     })
@@ -97,9 +133,16 @@ export default (socket: Socket) => {
         const game = games[code]
 
         if (game) {
+            const player = game.queue.find(p => p.socket === socket.id)
+
+            if (!player) return socket.emit('error', 'You are not playing')
+
+            if (game.creator.id !== game.admin.id && player.id === game.admin.id) game.admin = game.creator
+
             game.removePlayer(socket.id)
 
             io.to(code).emit('update', game)
+            socket.emit('left')
         }
     })
 

@@ -3,6 +3,7 @@ import { useHistory } from 'react-router-dom'
 
 import api from 'services/api'
 import { useUser } from 'providers/User'
+import { useSocket } from 'providers/Socket'
 
 import Letter from 'components/Letter'
 import Space from 'components/Space'
@@ -18,6 +19,7 @@ interface Props {
 
 const NewGame: React.FC<Props> = ({ headerContent: HeaderContent, submitText, currentPhrase, onSubmit }) => {
     const user = useUser()
+    const socket = useSocket()
     const history = useHistory()
     const [which, setWhich] = useState('word')
     const [phrase, setPhrase] = useState(currentPhrase || '')
@@ -37,7 +39,7 @@ const NewGame: React.FC<Props> = ({ headerContent: HeaderContent, submitText, cu
         ? onSubmit
         : async (phrase: string) => {
               const game = await api
-                  .post('/api/games', { phrase, user }, { withCredentials: true })
+                  .post('/api/games', { phrase, user, socket: socket.id }, { withCredentials: true })
                   .then(({ data }) => data)
                   .catch(e => e)
 

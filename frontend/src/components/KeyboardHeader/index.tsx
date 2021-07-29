@@ -11,12 +11,12 @@ interface Props {
     game: Hangman
 }
 
-const KeyboardHeader: React.FC<Props> = ({ game: { state, queue, creator }, children }) => {
+const KeyboardHeader: React.FC<Props> = ({ game: { state, queue, admin }, children }) => {
     const user = useUser()
     const playing = queue[0]
 
     if (!state.started || state.lost) {
-        if (user.id === creator.id) {
+        if (user.id === admin.id) {
             if (queue.length > 0) {
                 return <Container>{children}</Container>
             } else {
@@ -47,7 +47,7 @@ const KeyboardHeader: React.FC<Props> = ({ game: { state, queue, creator }, chil
             )
         }
 
-        if (user.id === creator.id)
+        if (user.id === admin.id)
             return (
                 <Container>
                     <span>you already know the phrase, so you can't play</span>

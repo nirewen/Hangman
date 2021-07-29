@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { Redirect, useHistory, useParams } from 'react-router-dom'
 import Modal from 'react-modal'
 
 import { IoPlay, IoTrash, IoChevronForward, IoInformationCircle, IoExit, IoEnter } from 'react-icons/io5'
 import { FaPencilAlt } from 'react-icons/fa'
 import { CgHashtag } from 'react-icons/cg'
+import { RiVipCrown2Fill } from 'react-icons/ri'
 
 import PartyPopper from 'icons/PartyPopper.svg'
 
@@ -64,7 +65,7 @@ const Game: React.FC = () => {
 
     useEffect(() => {
         if (code && user) {
-            socket?.emit('join-room', code, user)
+            socket.emit('join-room', code, user)
         }
     }, [socket, code, user])
 
@@ -87,13 +88,13 @@ const Game: React.FC = () => {
 
         if (game.queue.length < 2) return setWithTimeout('You need at least 2 players to begin', setError)
 
-        socket?.emit('start', code, user)
+        socket.emit('start', code, user)
     }
 
     const handlePlay = async (letter: string) => {
         if (!game?.state.started || game?.state.win) return
 
-        socket?.emit('play', code, { user, letter })
+        socket.emit('play', code, { user, letter })
     }
 
     const handleDelete = async () => {
@@ -102,17 +103,19 @@ const Game: React.FC = () => {
         history.push('/')
     }
 
-    const handleJoinLeave = () => {
+    const handleJoinLeave = useCallback(() => {
         if (!game) return
 
-        if (joined) socket?.emit('leave-game', code)
-        else socket?.emit('join-game', code, user)
-    }
+        if (joined) socket.emit('leave-game', code)
+        else socket.emit('join-game', code, user)
+    }, [code, user, socket, joined, game])
 
-    socket?.on('update', setGame)
-    socket?.on('delete', () => history.push('/'))
-    socket?.on('error', c => setWithTimeout(c, setError))
-    socket?.on('message', c => setWithTimeout(c, setMessage))
+    socket.on('joined', () => setJoined(true))
+    socket.on('left', () => setJoined(false))
+    socket.on('update', setGame)
+    socket.on('delete', () => history.push('/'))
+    socket.on('error', c => setWithTimeout(c, setError))
+    socket.on('message', c => setWithTimeout(c, setMessage))
 
     if (!game) {
         if (error === 'Game not found') return <Redirect to="/" />
@@ -147,35 +150,38 @@ const Game: React.FC = () => {
                 <Panel>
                     <Button
                         colorScheme="green"
-                        size={game.creator.id === user.id ? 'sm' : 'lg'}
+                        size="sm"
                         leftIcon={<IoInformationCircle />}
                         onClick={() => setGuessingWord(true)}
-                        disabled={(!game.state.win && !game.state.started) || user.id === game.creator.id}
-                        style={game.creator.id === user.id ? {} : { gridColumn: 'span 2' }}
+                        disabled={game.state.lost || game.state.win || !game.state.started || game.admin.id === user.id}
                     >
                         Guess phrase
                     </Button>
-                    {game.creator.id !== user.id && (
+
+                    <InviteButton link={`${window.location.origin}/join?code=${code}`} />
+
+                    {game.admin.id === user.id && (
+                        <Button size="sm" leftIcon={<FaPencilAlt />} onClick={() => setSettingWord(true)}>
+                            Set phrase
+                        </Button>
+                    )}
+
+                    {game.admin.id !== user.id && (
                         <Button
                             colorScheme={joined ? 'red' : 'gray'}
                             size="sm"
                             leftIcon={joined ? <IoExit /> : <IoEnter />}
                             onClick={handleJoinLeave}
+                            disabled={game.admin.id === user.id}
                         >
                             {joined ? 'Leave game' : 'Join game'}
                         </Button>
                     )}
-                    <InviteButton link={`${window.location.origin}/join?code=${code}`} />
 
                     {game.creator.id === user.id && (
-                        <>
-                            <Button size="sm" leftIcon={<FaPencilAlt />} onClick={() => setSettingWord(true)}>
-                                Set phrase
-                            </Button>
-                            <Button colorScheme="red" size="sm" leftIcon={<IoTrash />} onClick={handleDelete}>
-                                Delete
-                            </Button>
-                        </>
+                        <Button colorScheme="red" size="sm" leftIcon={<IoTrash />} onClick={handleDelete}>
+                            Delete
+                        </Button>
                     )}
                 </Panel>
                 {game.queue.length > 0 && (
@@ -190,6 +196,30 @@ const Game: React.FC = () => {
                                         username={p.user.username}
                                         avatar={p.user.avatar}
                                         score={p.score}
+                                        options={() =>
+                                            game.admin.id === user.id || game.creator.id === user.id ? (
+                                                <div className="options">
+                                                    <Tooltip hasArrow placement="top" label="Make admin">
+                                                        <Button
+                                                            size="sm"
+                                                            colorScheme="gray"
+                                                            onClick={() => socket.emit('set-admin', code, user, p.id)}
+                                                        >
+                                                            <RiVipCrown2Fill fill="black" />
+                                                        </Button>
+                                                    </Tooltip>
+                                                    <Tooltip hasArrow placement="top" label="Kick">
+                                                        <Button
+                                                            size="sm"
+                                                            colorScheme="red"
+                                                            onClick={() => socket.emit('kick', code, user, p.id)}
+                                                        >
+                                                            <IoExit />
+                                                        </Button>
+                                                    </Tooltip>
+                                                </div>
+                                            ) : null
+                                        }
                                     />
                                 </React.Fragment>
                             ))}
@@ -236,7 +266,7 @@ const Game: React.FC = () => {
                     headerContent={() => <>Type the new phrase</>}
                     submitText="Set"
                     onSubmit={async (phrase: string) => {
-                        socket?.emit('set-phrase', code, user, phrase)
+                        socket.emit('set-phrase', code, user, phrase)
                         setSettingWord(false)
                     }}
                 />
@@ -247,7 +277,7 @@ const Game: React.FC = () => {
                     headerContent={() => <>What's the phrase?</>}
                     submitText="Guess"
                     onSubmit={async (phrase: string) => {
-                        socket?.emit('guess', code, { user, phrase })
+                        socket.emit('guess', code, { user, phrase })
                         setGuessingWord(false)
                     }}
                 />
@@ -268,11 +298,11 @@ const Card: React.FC<Props> = ({ code }) => {
 
     useEffect(() => {
         if (code && user) {
-            socket?.emit('fetch', code, user)
+            socket.emit('fetch', code, user)
         }
     }, [socket, code, user])
 
-    socket?.on('update', game => game.code === code && setGame(game))
+    socket.on('update', game => game.code === code && setGame(game))
 
     if (!game)
         return (

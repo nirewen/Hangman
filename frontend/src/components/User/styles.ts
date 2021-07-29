@@ -15,6 +15,7 @@ export const Container = styled.div<Props>`
     color: ${({ theme }) => theme.colors.text};
     gap: 5px;
     align-items: center;
+    height: 40px;
     cursor: default;
 
     &:hover {
@@ -36,10 +37,17 @@ export const Container = styled.div<Props>`
             shade(0.2, current ? theme.colors.current : theme.colors.secondary)};
         margin-left: auto;
     }
+
+    .options {
+        display: flex;
+        gap: 8px;
+        margin-left: auto;
+        margin-right: -5px;
+    }
 `
 
 export const Avatar = styled.img`
-    width: 20px;
-    height: 20px;
+    width: 25px;
+    height: 25px;
     border-radius: 50%;
 `

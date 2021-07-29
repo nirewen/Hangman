@@ -3,7 +3,7 @@ import { io, Socket } from 'socket.io-client'
 
 const { REACT_APP_API_URL } = process.env
 
-const SocketContext = createContext<Socket | null>(null)
+const SocketContext = createContext<Socket>(io())
 
 const SocketProvider: React.FC = ({ children }) => {
     const socket = io(REACT_APP_API_URL!)

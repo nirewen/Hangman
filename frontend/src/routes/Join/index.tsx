@@ -22,10 +22,10 @@ const Join: React.FC = () => {
     }, [code, history, user])
 
     useEffect(() => {
-        socket?.emit('join-game', code, user)
+        socket.emit('join-game', code, user)
     }, [socket, code, user])
 
-    socket?.on('joined', () => history.push(`/game/${code}`))
+    socket.on('joined', code => history.push(`/game/${code}`))
 
     return (
         <Container>

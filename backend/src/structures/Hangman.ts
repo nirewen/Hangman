@@ -13,12 +13,15 @@ export class Hangman extends Game {
     public misses: string[] = []
     public guesses: string[] = []
     public word: Word = new Word('')
+    public reconnectTimeout: NodeJS.Timeout
 
-    constructor(code: string, creator: IUser, word: string) {
+    constructor(code: string, socket: string, creator: IUser, word: string) {
         super()
 
         this.code = code
         this.creator = new Player(creator.id, creator)
+        this.creator.socket = socket
+
         this.admin = this.creator
         this.setWord(word)
     }
@@ -41,7 +44,20 @@ export class Hangman extends Game {
     removePlayer(id: string) {
         const player = this.queue.find(p => p.socket === id)
 
-        this.queue.splice(this.queue.indexOf(player))
+        if (!player) return
+
+        this.queue.splice(this.queue.indexOf(player), 1)
+    }
+
+    setAdmin(id: string) {
+        const admin = this.admin
+        const player = this.queue.find(p => p.id === id)
+
+        if (!player) return
+
+        this.admin = player
+        this.queue.splice(this.queue.indexOf(player), 1)
+        this.addPlayer(admin.socket, admin.user)
     }
 
     addPlayer(socket: string, user: IUser) {
