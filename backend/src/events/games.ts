@@ -26,9 +26,9 @@ export default (socket: Socket) => {
 
         if (!game) return socket.emit('error', 'Game not found')
 
-        // if (user.id !== game.admin.id) {
-        game.addPlayer(socket.id, user)
-        // }
+        if (user.id !== game.admin.id) {
+            game.addPlayer(socket.id, user)
+        }
 
         socket.emit('joined', code)
         io.to(code).emit('update', game)
