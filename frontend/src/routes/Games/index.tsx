@@ -41,7 +41,7 @@ const Games: React.FC = () => {
     if (!!error && error === 'Empty')
         return (
             <EmptyContainer>
-                <span>Nothing to shows here</span>
+                <span>Nothing to show here</span>
                 <Link to="/new">
                     <Button>New game</Button>
                 </Link>
