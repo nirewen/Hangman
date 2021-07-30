@@ -42,7 +42,7 @@ export const Content = styled.div`
         align-items: center;
         justify-content: flex-start;
         grid-area: word;
-        font-size: 1rem;
+        font-size: 1.2rem;
         letter-spacing: 8px;
     }
 
@@ -53,6 +53,7 @@ export const Content = styled.div`
         justify-content: flex-start;
         grid-area: players;
         overflow-x: clip;
+        padding: 0 5px;
 
         .player {
             width: 40px;
