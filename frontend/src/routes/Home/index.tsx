@@ -11,6 +11,7 @@ import { ReactComponent as GlitchLogo } from 'assets/Glitch.svg'
 import { ReactComponent as Discord } from 'icons/Discord.svg'
 import { ReactComponent as Twitter } from 'icons/Twitter.svg'
 import { ReactComponent as Google } from 'icons/Google.svg'
+import ThemePicker from 'components/ThemePicker'
 
 const { REACT_APP_API_URL } = process.env
 
@@ -46,6 +47,8 @@ const Home: React.FC = () => {
                         >
                             <Button>Log out</Button>
                         </a>
+
+                        <ThemePicker />
                     </User>
                 ) : (
                     <Methods>

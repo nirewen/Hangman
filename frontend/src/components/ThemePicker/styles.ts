@@ -10,10 +10,10 @@ export const Container = styled.div`
     border-radius: 8px;
 `
 
-export const ThemeButton = styled.div<{ color: string }>`
+export const ThemeButton = styled.div<{ color: string; current: boolean }>`
     width: 20px;
     height: 20px;
     border-radius: 4px;
-    box-shadow: 0 0 0 2px ${({ color }) => shade(0.3, color)};
+    box-shadow: 0 0 0 2px ${({ current, color, theme }) => (current ? theme.colors.text : shade(0.3, color))};
     background-color: ${props => props.color};
 `
