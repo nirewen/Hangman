@@ -8,7 +8,6 @@ import Login from 'routes/Login'
 import Join from 'routes/Join'
 import NewGame from 'routes/NewGame'
 import Game from 'routes/Game'
-import Games from 'routes/Games'
 
 import UserProvider from 'providers/User'
 import SocketProvider from 'providers/Socket'
