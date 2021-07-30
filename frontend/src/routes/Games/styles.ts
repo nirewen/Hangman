@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-export const EmptyContainer = styled.div`
+export const EmptyContent = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -12,7 +12,7 @@ export const EmptyContainer = styled.div`
     > span {
         color: ${({ theme }) => theme.colors.text};
         font-family: ${({ theme }) => theme.fonts.content};
-        font-size: 2rem;
+        font-size: 1.5rem;
     }
 
     h3 {

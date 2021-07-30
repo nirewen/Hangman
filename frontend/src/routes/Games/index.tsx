@@ -8,7 +8,7 @@ import { useUser } from 'providers/User'
 
 import { Button, Input } from 'routes/Home/styles'
 
-import { Container, Content, EmptyContainer, Header } from './styles'
+import { Container, Content, EmptyContent, Header } from './styles'
 import GameContext from 'providers/Game'
 import GameStateContext, { InternalState } from 'providers/GameState'
 
@@ -40,12 +40,23 @@ const Games: React.FC = () => {
 
     if (!!error && error === 'Empty')
         return (
-            <EmptyContainer>
-                <span>Nothing to show here</span>
-                <Link to="/new">
-                    <Button>New game</Button>
-                </Link>
-            </EmptyContainer>
+            <Container>
+                <Header>
+                    <Link to="/new">
+                        <Button>New game</Button>
+                    </Link>
+                    <Input
+                        onChange={e => setCode(e.target.value)}
+                        value={code}
+                        onKeyUp={handleSubmit}
+                        maxLength={6}
+                        placeholder="join game"
+                    />
+                </Header>
+                <EmptyContent>
+                    <span>Nothing to show here</span>
+                </EmptyContent>
+            </Container>
         )
 
     return (
