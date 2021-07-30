@@ -5,19 +5,20 @@ import { FaClipboardCheck, FaClipboard } from 'react-icons/fa'
 
 interface Props {
     link: string
+    hideText?: boolean
 }
 
-const InviteButton: React.FC<Props> = ({ link }) => {
+const InviteButton: React.FC<Props> = ({ link, hideText }) => {
     const { hasCopied, onCopy } = useClipboard(link)
 
     return (
         <Button
-            colorScheme={hasCopied ? 'white' : 'blue'}
+            colorScheme={'blue'}
             size="sm"
-            leftIcon={hasCopied ? <FaClipboardCheck /> : <FaClipboard />}
+            leftIcon={hideText ? undefined : hasCopied ? <FaClipboardCheck /> : <FaClipboard />}
             onClick={onCopy}
         >
-            Copy invite
+            {hideText ? hasCopied ? <FaClipboardCheck /> : <FaClipboard /> : 'Copy invite'}
         </Button>
     )
 }

@@ -25,6 +25,7 @@ const Join: React.FC = () => {
         socket.emit('join-game', code, user)
     }, [socket, code, user])
 
+    socket.once('error', e => e === 'Game not found' && history.push('/'))
     socket.once('joined', code => history.push(`/game/${code}`))
 
     return (

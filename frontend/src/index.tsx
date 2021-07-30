@@ -42,9 +42,6 @@ ReactDOM.render(
                                 <Route path="/game/:code" exact>
                                     <Page component={Game} />
                                 </Route>
-                                <Route path="/games" exact>
-                                    <Page component={Games} />
-                                </Route>
                             </Switch>
                         </Router>
                     </SocketProvider>

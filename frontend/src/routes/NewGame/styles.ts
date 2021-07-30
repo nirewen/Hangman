@@ -4,7 +4,6 @@ import { shade } from 'polished'
 export const Container = styled.div`
     display: grid;
     grid-template-rows: 1fr 5fr 1fr;
-    grid-area: content;
     align-items: center;
     justify-content: center;
     min-height: 100%;

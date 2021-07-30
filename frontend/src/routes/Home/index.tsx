@@ -1,25 +1,70 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
+
+import Games from 'routes/Games'
+
+import { Container, User, Header, Footer, Landing, Avatar, Username, Methods, Button } from './styles'
+import { useUser } from 'providers/User'
+import MethodLink from 'components/MethodLink'
 
 import { ReactComponent as GlitchLogo } from 'assets/Glitch.svg'
+import { ReactComponent as Discord } from 'icons/Discord.svg'
+import { ReactComponent as Twitter } from 'icons/Twitter.svg'
+import { ReactComponent as Google } from 'icons/Google.svg'
 
-import { Container, Main, Header, Instructions, Button, Footer } from './styles'
+const { REACT_APP_API_URL } = process.env
+
+const handleLogout = (redirectTo?: string | null) => {
+    let path = `${REACT_APP_API_URL}/api/auth/logout`
+
+    if (redirectTo) path += `?redirectTo=${redirectTo}`
+
+    window.location.href = path
+
+    return null
+}
 
 const Home: React.FC = () => {
+    const query = new URLSearchParams(useLocation().search)
+    const redirectTo = query.get('redirectTo')
+    const user = useUser()
+
     return (
         <Container>
-            <Main>
-                <Header>
-                    Welcome to
-                    <span>Hangman</span>
-                </Header>
-                <Link to="/new">
-                    <Button>New game</Button>
-                </Link>
-            </Main>
-            <Instructions>
-                <img src="/img/How to play.png" alt="How to play Hangman" />
-            </Instructions>
+            <Header>Hangman</Header>
+            <Landing>
+                {user.id ? (
+                    <User>
+                        <Avatar src={user.avatar} alt={`${user.username}'s avatar`} />
+                        <Username>{user.username}</Username>
+                        <a
+                            href="/logout"
+                            onClick={e => {
+                                e.preventDefault()
+                                handleLogout(redirectTo)
+                            }}
+                        >
+                            <Button>Log out</Button>
+                        </a>
+                    </User>
+                ) : (
+                    <Methods>
+                        <MethodLink type="discord" bg="#5865F2">
+                            <Discord />
+                            Discord
+                        </MethodLink>
+                        <MethodLink type="twitter" bg="#1D9BF0">
+                            <Twitter />
+                            Twitter
+                        </MethodLink>
+                        <MethodLink type="google" bg="#ffffff" color="#000000">
+                            <Google />
+                            Google
+                        </MethodLink>
+                    </Methods>
+                )}
+                <Games />
+            </Landing>
             <Footer>
                 <div>
                     <span>Made by</span>

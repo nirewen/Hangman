@@ -1,27 +1,35 @@
 import React, { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 
 import Card from 'components/@Game/Card'
 import Hangman from 'structures/Hangman'
 import { useSocket } from 'providers/Socket'
 import { useUser } from 'providers/User'
 
-import { Button } from 'routes/Home/styles'
+import { Button, Input } from 'routes/Home/styles'
 
-import { Container } from './styles'
+import { Container, Content, EmptyContainer, Header } from './styles'
 import GameContext from 'providers/Game'
 import GameStateContext, { InternalState } from 'providers/GameState'
 
 const Games: React.FC = () => {
     const user = useUser()
     const socket = useSocket()
+    const history = useHistory()
     const [fetched, setFetched] = useState(false)
     const [games, setGames] = useState<Hangman[]>()
     const [error, setError] = useState('')
+    const [code, setCode] = useState('')
 
     useEffect(() => {
         if (!fetched) socket.emit('fetch-games', user)
     }, [socket, user, fetched])
+
+    const handleSubmit = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        e.preventDefault()
+
+        if (e.key === 'Enter') history.push(`/join?code=${code}`)
+    }
 
     socket.on('refetch', () => setFetched(false))
     socket.once('games', games => {
@@ -32,30 +40,44 @@ const Games: React.FC = () => {
 
     if (!!error && error === 'Empty')
         return (
-            <Container>
-                <span>Nothing to display here</span>
+            <EmptyContainer>
+                <span>Nothing to shows here</span>
                 <Link to="/new">
                     <Button>New game</Button>
                 </Link>
-            </Container>
+            </EmptyContainer>
         )
 
     return (
         <Container>
-            {games &&
-                games.map(game => {
-                    const { code } = game
-                    const joined = !!game.queue.find(p => p.id === user.id)
-                    const state = { joined } as InternalState
+            <Header>
+                <Link to="/new">
+                    <Button>New game</Button>
+                </Link>
+                <Input
+                    onChange={e => setCode(e.target.value)}
+                    value={code}
+                    onKeyUp={handleSubmit}
+                    maxLength={6}
+                    placeholder="join game"
+                />
+            </Header>
+            <Content>
+                {games &&
+                    games.map(game => {
+                        const { code } = game
+                        const joined = !!game.queue.find(p => p.id === user.id)
+                        const state = { joined } as InternalState
 
-                    return (
-                        <GameContext.Provider key={game.code} value={{ code, game }}>
-                            <GameStateContext.Provider value={{ state }}>
-                                <Card />
-                            </GameStateContext.Provider>
-                        </GameContext.Provider>
-                    )
-                })}
+                        return (
+                            <GameContext.Provider key={game.code} value={{ code, game }}>
+                                <GameStateContext.Provider value={{ state }}>
+                                    <Card />
+                                </GameStateContext.Provider>
+                            </GameContext.Provider>
+                        )
+                    })}
+            </Content>
         </Container>
     )
 }

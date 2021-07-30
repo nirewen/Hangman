@@ -41,7 +41,9 @@ router.delete('/:code', authMiddleware, (req: Request, res: Response) => {
 
     // @ts-ignore
     if (game.creator.id === req.user?.id) {
-        io.sockets.sockets.get(game.creator.socket).leave(code)
+        const creatorSocket = io.sockets.sockets.get(game.creator.socket)
+
+        if (creatorSocket) creatorSocket.leave(code)
 
         io.to(code).emit('delete')
 

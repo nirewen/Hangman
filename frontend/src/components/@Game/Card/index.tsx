@@ -45,27 +45,21 @@ const Card: React.FC = () => {
             <Content className="players">
                 {game.queue.map((p, i) => (
                     <Tooltip key={p.id} hasArrow label={p.user.username} placement="top">
-                        <img className={`player${i === 0 ? ' current' : ''}`} src={p.user.avatar} />
+                        <img
+                            className={`player${i === 0 ? ' current' : ''}`}
+                            src={p.user.avatar}
+                            alt={`${p.user.username}'s avatar`}
+                        />
                     </Tooltip>
                 ))}
             </Content>
             <Content className="options">
-                <InviteButton link={`${window.location.origin}/join?code=${game.code}`} />
-                <Button
-                    colorScheme="green"
-                    size="sm"
-                    rightIcon={<IoChevronForward />}
-                    onClick={() => history.push(`/game/${game.code}`)}
-                >
-                    View
+                <InviteButton link={`${window.location.origin}/join?code=${game.code}`} hideText />
+                <Button colorScheme="green" size="sm" onClick={() => history.push(`/game/${game.code}`)}>
+                    <IoChevronForward />
                 </Button>
-                <Button
-                    colorScheme="red"
-                    size="sm"
-                    rightIcon={state.joined ? <IoExit /> : <IoTrash />}
-                    onClick={handleDeleteLeave}
-                >
-                    {state.joined ? 'Leave' : 'Delete'}
+                <Button colorScheme="red" size="sm" onClick={handleDeleteLeave}>
+                    {state.joined ? <IoExit /> : <IoTrash />}
                 </Button>
             </Content>
         </Container>

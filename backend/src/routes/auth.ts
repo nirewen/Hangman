@@ -29,4 +29,12 @@ router.get('/google', storeRedirect, passport.authenticate('google'), (req: Requ
     req.session.redirectTo = null
 })
 
+router.get('/logout', storeRedirect, (req: Request, res: Response) => {
+    req.logout()
+
+    res.redirect(`http://${req.hostname}${req.session.redirectTo}`)
+
+    req.session.redirectTo = null
+})
+
 export default router

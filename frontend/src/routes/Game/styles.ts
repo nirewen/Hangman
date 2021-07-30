@@ -7,7 +7,6 @@ export const Container = styled.div`
         'man keyboard players';
     grid-template-columns: 5fr 15fr 5fr;
     grid-template-rows: 5fr 2fr;
-    grid-area: content;
     min-height: 100%;
     padding: 2rem 4rem;
     justify-content: center;

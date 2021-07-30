@@ -8,10 +8,11 @@ import Word from '../structures/types/Word'
 
 export default (socket: Socket) => {
     socket.on('join-room', (code: string, user: IUser) => {
+        if (!user.id) return
+
         const game = games[code]
 
         if (!game) return socket.emit('error', 'Game not found')
-        if (!user.id) return
 
         socket.join(code)
 
@@ -19,10 +20,11 @@ export default (socket: Socket) => {
     })
 
     socket.on('join-game', (code: string, user: IUser) => {
+        if (!user.id) return
+
         const game = games[code]
 
         if (!game) return socket.emit('error', 'Game not found')
-        if (!user.id) return
 
         // if (user.id !== game.admin.id) {
         game.addPlayer(socket.id, user)
@@ -41,10 +43,11 @@ export default (socket: Socket) => {
     })
 
     socket.on('set-admin', (code: string, user: IUser, id: string) => {
+        if (!user.id) return
+
         const game = games[code]
 
         if (!game) return socket.emit('error', 'Game not found')
-        if (!user.id) return
 
         if (!(game.admin.id === user.id || game.creator.id === user.id))
             return socket.emit('error', 'You are not the admin of the game')
@@ -55,10 +58,11 @@ export default (socket: Socket) => {
     })
 
     socket.on('kick', (code: string, user: IUser, id: string) => {
+        if (!user.id) return
+
         const game = games[code]
 
         if (!game) return socket.emit('error', 'Game not found')
-        if (!user.id) return
 
         const kicked = game.queue.find(p => p.id === id)
 
@@ -72,10 +76,11 @@ export default (socket: Socket) => {
     })
 
     socket.on('start', (code: string, user: IUser) => {
+        if (!user.id) return
+
         const game = games[code]
 
         if (!game) return socket.emit('error', 'Game not found')
-        if (!user.id) return
         if (user.id !== game.creator.id) return
 
         game.state.started = true
@@ -84,19 +89,22 @@ export default (socket: Socket) => {
     })
 
     socket.on('fetch-games', (user: IUser) => {
-        const userGames = Object.entries(games)
-            .filter(([_, game]) => game.queue.find(p => p.id === user.id) || game.admin.id === user.id)
-            .map(([_, game]) => game)
+        if (!user.id) return
+
+        const userGames = Object.values(games).filter(
+            game => game.queue.find(p => p.id === user.id) || game.admin.id === user.id
+        )
 
         if (userGames.length > 0) return socket.emit('games', userGames)
         else return socket.emit('error', 'Empty')
     })
 
     socket.on('set-phrase', (code: string, user: IUser, phrase: string) => {
+        if (!user.id) return
+
         const game = games[code]
 
         if (!game) return socket.emit('error', 'Game not found')
-        if (!user.id) return
         if (user.id !== game.admin.id) return
 
         const newPhrase = new Word(phrase)
@@ -149,8 +157,8 @@ export default (socket: Socket) => {
     })
 
     socket.on('play', async (code: string, { user, letter }: { user: IUser; letter: string }) => {
+        if (!user.id) return
         if (!letter) return socket.emit('error', 'Missing letter')
-        if (!user) return
 
         const game = games[code]
 
@@ -173,7 +181,7 @@ export default (socket: Socket) => {
     })
 
     socket.on('guess', async (code: string, { user, phrase }: { user: IUser; phrase: string }) => {
-        if (!user) return socket.emit('error', 'Unauthorized')
+        if (!user.id) return
         if (!phrase) return socket.emit('error', 'Missing guess')
 
         const game = games[code]
