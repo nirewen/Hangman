@@ -6,7 +6,7 @@ export interface User {
     id: string
     username: string
     discriminator: string
-    avatar?: string
+    avatar: string
 }
 
 const UserContext = createContext<User>({} as User)

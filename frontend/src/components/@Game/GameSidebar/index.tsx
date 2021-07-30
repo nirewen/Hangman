@@ -47,6 +47,7 @@ const GameSidebar: React.FC = () => {
 
     return (
         <Container>
+            <User username={user.username} avatar={user.avatar} />
             <Panel>
                 <Button
                     colorScheme="green"
