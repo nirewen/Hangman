@@ -8,17 +8,18 @@ export interface Props {
     avatar: string
     score?: number
     options?: React.FC
+    displayOptions?: boolean
 }
 
-const User: React.FC<Props> = ({ current, username, avatar, score, options: Options }) => {
-    const [hovering, setHovering] = useState(false)
+const User: React.FC<Props> = ({ current, username, avatar, score, options: Options, displayOptions }) => {
+    const [hovering, setHovering] = useState(displayOptions)
 
     return (
         <Container
             className="user"
             current={current}
-            onMouseEnter={() => setHovering(true)}
-            onMouseLeave={() => setHovering(false)}
+            onMouseEnter={() => setHovering(displayOptions || true)}
+            onMouseLeave={() => setHovering(displayOptions || false)}
         >
             <Avatar src={avatar} alt={`${username}'s avatar`} crossOrigin="anonymous" />
             <span className="name">{username}</span>

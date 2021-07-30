@@ -6,6 +6,7 @@ import api from 'services/api'
 import { IoTrash, IoInformationCircle, IoExit, IoEnter } from 'react-icons/io5'
 import { FaPencilAlt } from 'react-icons/fa'
 import { RiVipCrown2Fill } from 'react-icons/ri'
+import { AiFillHome } from 'react-icons/ai'
 
 import User from 'components/User'
 import { useGame } from 'providers/Game'
@@ -47,7 +48,20 @@ const GameSidebar: React.FC = () => {
 
     return (
         <Container>
-            <User username={user.username} avatar={user.avatar} />
+            <User
+                username={user.username}
+                avatar={user.avatar}
+                options={() => {
+                    return (
+                        <div className="options">
+                            <Button size="sm" colorScheme="blue" onClick={() => history.push('/')}>
+                                <AiFillHome />
+                            </Button>
+                        </div>
+                    )
+                }}
+                displayOptions
+            />
             <Panel>
                 <Button
                     colorScheme="green"
