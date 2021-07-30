@@ -4,7 +4,7 @@ import { Container } from './styles'
 
 const Letter: React.FC = ({ children }) => {
     return (
-        <Container>
+        <Container className="notranslate">
             <span>{children}</span>
         </Container>
     )

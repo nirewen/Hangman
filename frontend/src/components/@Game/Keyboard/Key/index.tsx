@@ -8,7 +8,10 @@ interface Props {
 
 const Key: React.FC<Props> = ({ disabled, onClick, children }) => {
     return (
-        <Container className={disabled ? 'disabled' : 'key'} onClick={e => !disabled && onClick && onClick(e)}>
+        <Container
+            className={`notranslate ${disabled ? 'disabled' : 'key'}`}
+            onClick={e => !disabled && onClick && onClick(e)}
+        >
             {children}
         </Container>
     )

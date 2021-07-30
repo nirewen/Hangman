@@ -9,6 +9,7 @@ import Letter from 'components/@Game/Letter'
 import Space from 'components/@Game/Space'
 
 import { Container, CreateButton, Header, LetterRow, Letters, PhraseInput } from './styles'
+import { validate } from 'utils'
 
 interface Props {
     headerContent?: React.FC
@@ -39,7 +40,7 @@ const NewGame: React.FC<Props> = ({ headerContent: HeaderContent, submitText, cu
         ? onSubmit
         : async (phrase: string) => {
               const game = await api
-                  .post('/api/games', { phrase, user, socket: socket.id }, { withCredentials: true })
+                  .post('/api/games', { phrase: phrase.trim(), user, socket: socket.id }, { withCredentials: true })
                   .then(({ data }) => data)
                   .catch(e => e)
 
@@ -49,14 +50,12 @@ const NewGame: React.FC<Props> = ({ headerContent: HeaderContent, submitText, cu
     const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         let value = e.target.value.toUpperCase()
 
-        if (value.includes(' ')) setWhich('phrase')
+        if (phrase.includes(' ')) setWhich('phrase')
         else setWhich('word')
 
-        if (!/^[A-Z\u00C0-\u024F\u1E00-\u1EFF\s+]*$/g.test(value)) return
+        const word = validate(value)
 
-        value = value.replace(/( +(?= )|\n)/g, '')
-
-        setPhrase(value)
+        setPhrase(word)
     }
 
     return (

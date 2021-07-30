@@ -13,7 +13,7 @@ import { CloseButton } from './styles'
 Modal.setAppElement('#root')
 
 const GuessModal: React.FC = () => {
-    const { code, game } = useGame()
+    const { code } = useGame()
     const { state, setState } = useGameState()
     const user = useUser()
     const socket = useSocket()
@@ -22,7 +22,6 @@ const GuessModal: React.FC = () => {
         <Modal className="Modal" overlayClassName="Overlay" isOpen={state.guessing!} shouldCloseOnOverlayClick={true}>
             <CloseButton onClick={() => setState!({ guessing: false })}>&times;</CloseButton>
             <NewGame
-                currentPhrase={game.word.word}
                 headerContent={() => <>What's the phrase?</>}
                 submitText="Guess"
                 onSubmit={(phrase: string) => {
