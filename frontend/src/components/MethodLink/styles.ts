@@ -11,10 +11,10 @@ export const Container = styled.a<Props>`
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 2rem 2rem 1rem 2rem;
+    padding: 1rem 1rem 1rem 1rem;
+    height: max-content;
     gap: 10px;
     border-radius: 15px;
-    font-size: 1.2rem;
     font-weight: 700;
     background-color: ${props => props.bg || shade(0.5, props.theme.colors.primary)};
     color: ${props => props.color || props.theme.colors.text};

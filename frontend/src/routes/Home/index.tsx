@@ -3,7 +3,19 @@ import { useLocation } from 'react-router-dom'
 
 import Games from 'routes/Games'
 
-import { Container, User, Header, Footer, Landing, Avatar, Username, Methods, Button } from './styles'
+import {
+    Container,
+    User,
+    Header,
+    Footer,
+    Landing,
+    Avatar,
+    Username,
+    Methods,
+    Button,
+    Heading,
+    LoggedOut,
+} from './styles'
 import { useUser } from 'providers/User'
 import MethodLink from 'components/MethodLink'
 
@@ -51,20 +63,23 @@ const Home: React.FC = () => {
                         <ThemePicker />
                     </User>
                 ) : (
-                    <Methods>
-                        <MethodLink type="discord" bg="#5865F2">
-                            <Discord />
-                            Discord
-                        </MethodLink>
-                        <MethodLink type="twitter" bg="#1D9BF0">
-                            <Twitter />
-                            Twitter
-                        </MethodLink>
-                        <MethodLink type="google" bg="#ffffff" color="#000000">
-                            <Google />
-                            Google
-                        </MethodLink>
-                    </Methods>
+                    <LoggedOut>
+                        <Heading>Login with</Heading>
+                        <Methods>
+                            <MethodLink type="discord" bg="#5865F2">
+                                <Discord />
+                                Discord
+                            </MethodLink>
+                            <MethodLink type="twitter" bg="#1D9BF0">
+                                <Twitter />
+                                Twitter
+                            </MethodLink>
+                            <MethodLink type="google" bg="#ffffff" color="#000000">
+                                <Google />
+                                Google
+                            </MethodLink>
+                        </Methods>
+                    </LoggedOut>
                 )}
                 <Games />
             </Landing>

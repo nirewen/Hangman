@@ -59,6 +59,26 @@ const Games: React.FC = () => {
             </Container>
         )
 
+    if (!games && !user.id)
+        return (
+            <Container>
+                <Header>
+                    <Button>New game</Button>
+                    <Input
+                        onChange={e => setCode(e.target.value)}
+                        value={code}
+                        onKeyUp={handleSubmit}
+                        maxLength={6}
+                        placeholder="join game"
+                        disabled
+                    />
+                </Header>
+                <EmptyContent>
+                    <span>Log in first</span>
+                </EmptyContent>
+            </Container>
+        )
+
     return (
         <Container>
             <Header>

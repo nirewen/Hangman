@@ -23,10 +23,29 @@ export const Landing = styled.div`
     height: 1px;
 `
 
+export const LoggedOut = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    gap: 1rem;
+    background-color: ${({ theme }) => theme.colors.primary};
+    border-radius: 10px;
+`
+
 export const Methods = styled.div`
     display: flex;
+    justify-content: center;
+    padding: 1rem;
     gap: 1rem;
-    height: max-content;
+`
+
+export const Heading = styled.h1`
+    display: flex;
+    font-size: 1.3rem;
+    font-family: ${({ theme }) => theme.fonts.default};
+    color: ${({ theme }) => theme.colors.text};
 `
 
 export const User = styled.main`
