@@ -44,6 +44,7 @@ export const Content = styled.div`
         grid-area: word;
         font-size: 1.2rem;
         letter-spacing: 8px;
+        overflow-x: clip;
     }
 
     &.players {

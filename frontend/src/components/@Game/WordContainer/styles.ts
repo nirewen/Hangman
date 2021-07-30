@@ -37,4 +37,9 @@ export const State = styled.div<{ bg?: number[] }>`
     font-weight: 700;
     border-radius: 1rem;
     top: 10%;
+
+    svg {
+        width: 30px;
+        height: 30px;
+    }
 `
