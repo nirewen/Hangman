@@ -99,9 +99,11 @@ const GameSidebar: React.FC = () => {
                     </Button>
                 )}
             </Panel>
-            {game.queue.length > 0 && (
-                <Users>
-                    {[...game.queue]
+            <Users>
+                <span className="title">ADMIN</span>
+                <User username={game.admin.user.username} avatar={game.admin.user.avatar} displayOptions />
+                {game.queue.length > 0 &&
+                    [...game.queue]
                         .sort((a, b) => b.score - a.score)
                         .map((p, i) => (
                             <React.Fragment key={i}>
@@ -138,8 +140,7 @@ const GameSidebar: React.FC = () => {
                                 />
                             </React.Fragment>
                         ))}
-                </Users>
-            )}
+            </Users>
         </Container>
     )
 }

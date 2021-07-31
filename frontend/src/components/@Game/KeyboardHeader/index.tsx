@@ -15,7 +15,7 @@ const KeyboardHeader: React.FC<Props> = ({ game: { state, queue, admin }, childr
     const user = useUser()
     const playing = queue[0]
 
-    if (!state.started || state.lost) {
+    if (!playing || !state.started || state.lost) {
         if (user.id === admin.id) {
             if (queue.length > 0) {
                 return <Container>{children}</Container>
