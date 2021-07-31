@@ -81,6 +81,10 @@ export class Hangman extends Game {
         this.word = word instanceof Word ? word : new Word(word)
     }
 
+    revealWord() {
+        this.word.letters.forEach(l => l.show())
+    }
+
     play(letter: string, player = this.player) {
         letter = Words.clean(letter.toUpperCase())
 
@@ -103,7 +107,7 @@ export class Hangman extends Game {
         } else this.misses.push(letter)
 
         if (this.misses.length >= 6) {
-            this.word.letters.forEach(l => l.show())
+            this.revealWord()
 
             this.state.lost = true
             this.state.message = 'The man was hang'
@@ -129,7 +133,7 @@ export class Hangman extends Game {
         if (word == this.word.valueOf()) {
             player.score += 100
 
-            this.word.letters.forEach(l => l.show())
+            this.revealWord()
 
             return true
         } else throw new PlayerError('Wrong word')

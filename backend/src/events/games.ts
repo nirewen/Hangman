@@ -150,6 +150,12 @@ export default (socket: Socket) => {
 
             game.removePlayer(socket.id)
 
+            if (game.queue.length < 2) {
+                game.state.started = false
+
+                io.to(code).emit('message', 'Game paused')
+            }
+
             io.emit('refetch')
             io.to(code).emit('update', game)
             socket.emit('left')
