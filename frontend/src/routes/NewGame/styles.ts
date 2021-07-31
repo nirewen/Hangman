@@ -8,7 +8,7 @@ export const Container = styled.div`
     justify-content: center;
     min-height: 100%;
     gap: 3rem;
-    padding: 3rem 20%;
+    padding: 3rem 0;
 `
 
 export const Header = styled.h1`
@@ -35,7 +35,7 @@ export const LetterRow = styled.div`
     font-family: ${({ theme }) => theme.fonts.mono};
     color: ${({ theme }) => theme.colors.text};
     text-transform: uppercase;
-    font-size: 4rem;
+    font-size: 3rem;
     justify-content: center;
     gap: 1rem;
 `
