@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { Link, useHistory } from 'react-router-dom'
 
 import Card from 'components/@Game/Card'
@@ -25,18 +25,38 @@ const Games: React.FC = () => {
         if (!fetched) socket.emit('fetch-games', user)
     }, [socket, user, fetched])
 
-    const handleSubmit = (e: React.KeyboardEvent<HTMLInputElement>) => {
-        e.preventDefault()
+    const handleSubmit = useCallback(
+        (e: React.KeyboardEvent<HTMLInputElement>) => {
+            e.preventDefault()
 
-        if (e.key === 'Enter') history.push(`/join?code=${code}`)
-    }
+            if (e.key === 'Enter') history.push(`/join?code=${code}`)
+        },
+        [history, code]
+    )
 
-    socket.on('refetch', () => setFetched(false))
-    socket.once('games', games => {
-        setFetched(true)
-        setGames(games)
-    })
-    socket.once('error', setError)
+    const handleRefetch = useCallback(() => {
+        setFetched(false)
+    }, [setFetched])
+
+    const handleUpdate = useCallback(
+        games => {
+            setFetched(true)
+            setGames(games)
+        },
+        [setFetched, setGames]
+    )
+
+    useEffect(() => {
+        socket.on('refetch', handleRefetch)
+        socket.on('games', handleUpdate)
+        socket.on('error', setError)
+
+        return () => {
+            socket.off('refetch', handleRefetch)
+            socket.off('games', handleUpdate)
+            socket.off('error', setError)
+        }
+    }, [socket, handleRefetch, handleUpdate, setError])
 
     if (!!error && error === 'Empty')
         return (

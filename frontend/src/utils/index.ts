@@ -60,5 +60,5 @@ export const clean = (str: string) => {
 }
 
 export const validate = (word: string) => {
-    return word.replace(/([^A-Z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)/g, '')
+    return word.replace(/([^A-Z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)/g, '').replace(/\r?\n/g, '')
 }

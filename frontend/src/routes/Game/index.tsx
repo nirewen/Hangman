@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { Redirect, useHistory, useParams } from 'react-router-dom'
 
 import Hangman from 'structures/Hangman'
@@ -48,22 +48,39 @@ const Game: React.FC = () => {
         }
     }, [socket, code, user])
 
-    const setState = (newState: InternalState) => {
-        updateState({
-            ...state,
-            ...newState,
-        })
-    }
+    const setState = useCallback(
+        (newState: InternalState) => {
+            updateState({
+                ...state,
+                ...newState,
+            })
+        },
+        [state]
+    )
 
-    const setMessage = (newMessage: GameMessage) => {
-        updateMessage({
-            ...message,
-            ...newMessage,
-        })
-    }
+    const setMessage = useCallback(
+        (newMessage: GameMessage) => {
+            updateMessage({
+                ...message,
+                ...newMessage,
+            })
+        },
+        [message]
+    )
 
-    socket.on('update', setGame)
-    socket.on('delete', () => history.push('/'))
+    const handleDelete = useCallback(() => {
+        history.push('/')
+    }, [history])
+
+    useEffect(() => {
+        socket.on('update', setGame)
+        socket.on('delete', handleDelete)
+
+        return () => {
+            socket.off('update', setGame)
+            socket.off('delete', handleDelete)
+        }
+    }, [socket, setGame, handleDelete])
 
     if (!game) {
         if (message.type === 'error' && message.value === 'Game not found') return <Redirect to="/" />

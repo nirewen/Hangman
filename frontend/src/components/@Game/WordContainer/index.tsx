@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useCallback, useEffect, useMemo } from 'react'
 import { useGame } from 'providers/Game'
 import { useSocket } from 'providers/Socket'
 
@@ -17,8 +17,27 @@ const WordContainer: React.FC = () => {
     const { message, setMessage } = useGameMessage()
     const socket = useSocket()
 
-    socket.on('error', value => setWithTimeout({ type: 'error', value }, setMessage!, { type: '', message: '' }))
-    socket.on('message', c => setWithTimeout(c, setMessage!, { type: '', value: '' }))
+    const initialValue = useMemo(() => ({ type: '', value: '' }), [])
+
+    const handleError = useCallback(
+        value => setWithTimeout({ type: 'error', value }, setMessage!, initialValue),
+        [setMessage, initialValue]
+    )
+
+    const handleMessage = useCallback(
+        ({ type, value }) => setWithTimeout({ type, value }, setMessage!, initialValue),
+        [setMessage, initialValue]
+    )
+
+    useEffect(() => {
+        socket.on('error', handleError)
+        socket.on('message', handleMessage)
+
+        return () => {
+            socket.off('error', handleError)
+            socket.off('message', handleMessage)
+        }
+    }, [socket, handleError, handleMessage])
 
     return (
         <Container>

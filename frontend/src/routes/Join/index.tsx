@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import { useLocation, useHistory } from 'react-router'
 
 import { useUser } from 'providers/User'
@@ -15,7 +15,9 @@ const Join: React.FC = () => {
 
     useEffect(() => {
         let timeout = setTimeout(() => {
-            if (!user.id) history.push(`/login?redirectTo=/join?code=${code}`)
+            if (!user.id) {
+                history.push(`/login?redirectTo=/join?code=${code}`)
+            }
         }, 1000)
 
         return () => clearTimeout(timeout)
@@ -25,8 +27,31 @@ const Join: React.FC = () => {
         socket.emit('join-game', code, user)
     }, [socket, code, user])
 
-    socket.once('error', e => e === 'Game not found' && history.push('/'))
-    socket.once('joined', code => history.push(`/game/${code}`))
+    const handleError = useCallback(
+        e => {
+            if (e === 'Game not found') {
+                return history.push('/')
+            }
+        },
+        [history]
+    )
+
+    const handleJoined = useCallback(
+        code => {
+            history.push(`/game/${code}`)
+        },
+        [history]
+    )
+
+    useEffect(() => {
+        socket.on('error', handleError)
+        socket.on('joined', handleJoined)
+
+        return () => {
+            socket.off('error', handleError)
+            socket.off('joined', handleJoined)
+        }
+    }, [socket, handleError, handleJoined])
 
     return (
         <Container>

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 
 import api from 'services/api'
@@ -30,22 +30,32 @@ const NewGame: React.FC<Props> = ({ headerContent: HeaderContent, submitText, cu
 
     useEffect(() => {
         let timeout = setTimeout(() => {
-            if (!user.id) history.push(`/login?redirectTo=/new`)
+            if (!user.id) {
+                history.push(`/login?redirectTo=/new`)
+            }
         }, 1000)
 
         return () => clearTimeout(timeout)
     }, [history, user])
 
-    const handleCreation = onSubmit
-        ? onSubmit
-        : async (phrase: string) => {
-              const game = await api
-                  .post('/api/games', { phrase: phrase.trim(), user, socket: socket.id }, { withCredentials: true })
-                  .then(({ data }) => data)
-                  .catch(e => e)
+    const handleCreation = useMemo(
+        () =>
+            onSubmit
+                ? onSubmit
+                : async (phrase: string) => {
+                      const game = await api
+                          .post(
+                              '/api/games',
+                              { phrase: phrase.trim(), user, socket: socket.id },
+                              { withCredentials: true }
+                          )
+                          .then(({ data }) => data)
+                          .catch(e => e)
 
-              if (game) history.push(`/game/${game.code}`)
-          }
+                      if (game) history.push(`/game/${game.code}`)
+                  },
+        [history, socket.id, user, onSubmit]
+    )
 
     const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         let value = e.target.value.toUpperCase()
@@ -58,6 +68,17 @@ const NewGame: React.FC<Props> = ({ headerContent: HeaderContent, submitText, cu
         setPhrase(word)
     }
 
+    const handleSubmit = useCallback(
+        (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+            if (e.key === 'Enter') {
+                e.preventDefault()
+
+                handleCreation(phrase)
+            }
+        },
+        [phrase, handleCreation]
+    )
+
     return (
         <Container>
             <Header>{HeaderContent ? <HeaderContent /> : `Select the ${which}!`}</Header>
@@ -69,7 +90,7 @@ const NewGame: React.FC<Props> = ({ headerContent: HeaderContent, submitText, cu
                     value={phrase}
                     maxLength={64}
                     onChange={handleChange}
-                    onKeyUp={e => e.key === 'Enter' && handleCreation(phrase)}
+                    onKeyUp={handleSubmit}
                     onFocus={() => {
                         const input = inputRef?.current
 
