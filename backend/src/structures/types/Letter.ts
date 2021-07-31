@@ -9,8 +9,8 @@ class Letter {
         this.hidden = letter !== '\u3000'
     }
 
-    show() {
-        this.hidden = false
+    show(value = true) {
+        this.hidden = !value
     }
 
     valueOf() {

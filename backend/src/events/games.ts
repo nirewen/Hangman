@@ -83,6 +83,8 @@ export default (socket: Socket) => {
         if (!game) return socket.emit('error', 'Game not found')
         if (user.id !== game.admin.id) return
 
+        game.reset()
+
         game.state.started = true
 
         io.to(code).emit('update', game)
@@ -114,6 +116,20 @@ export default (socket: Socket) => {
 
         game.reset()
         game.setWord(newPhrase)
+
+        io.to(code).emit('update', game)
+    })
+
+    socket.on('reveal-phrase', (code: string, user: IUser) => {
+        if (!user.id) return
+
+        const game = games[code]
+
+        if (!game) return socket.emit('error', 'Game not found')
+        if (user.id !== game.admin.id) return
+
+        game.revealWord()
+        game.state.lost = true
 
         io.to(code).emit('update', game)
     })

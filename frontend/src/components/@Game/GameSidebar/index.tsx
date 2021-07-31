@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom'
 import { Button, Tooltip } from '@chakra-ui/react'
 import api from 'services/api'
 
-import { IoTrash, IoInformationCircle, IoExit, IoEnter } from 'react-icons/io5'
+import { IoTrash, IoInformationCircle, IoExit, IoEnter, IoSearch } from 'react-icons/io5'
 import { FaPencilAlt } from 'react-icons/fa'
 import { RiVipCrown2Fill } from 'react-icons/ri'
 import { AiFillHome } from 'react-icons/ai'
@@ -46,6 +46,10 @@ const GameSidebar: React.FC = () => {
             .catch(e => e)
     }, [code, history])
 
+    const handlePhraseReveal = useCallback(() => {
+        socket.emit('reveal-phrase', code, user)
+    }, [code, user, socket])
+
     return (
         <Container>
             <User
@@ -54,9 +58,18 @@ const GameSidebar: React.FC = () => {
                 options={() => {
                     return (
                         <div className="options">
-                            <Button size="sm" colorScheme="blue" onClick={() => history.push('/')}>
-                                <AiFillHome />
-                            </Button>
+                            <Tooltip hasArrow label="Go home">
+                                <Button size="sm" colorScheme="blue" onClick={() => history.push('/')}>
+                                    <AiFillHome />
+                                </Button>
+                            </Tooltip>
+                            {game.creator.id === user.id && (
+                                <Tooltip hasArrow label="Delete game">
+                                    <Button colorScheme="red" size="sm" onClick={handleDelete}>
+                                        <IoTrash />
+                                    </Button>
+                                </Tooltip>
+                            )}
                         </div>
                     )
                 }}
@@ -93,15 +106,21 @@ const GameSidebar: React.FC = () => {
                     </Button>
                 )}
 
-                {game.creator.id === user.id && (
-                    <Button colorScheme="red" size="sm" leftIcon={<IoTrash />} onClick={handleDelete}>
-                        Delete
+                {game.admin.id === user.id && (
+                    <Button
+                        colorScheme="yellow"
+                        size="sm"
+                        leftIcon={<IoSearch />}
+                        onClick={handlePhraseReveal}
+                        disabled={game.state.lost || game.state.win || !game.state.started || game.admin.id !== user.id}
+                    >
+                        Reveal
                     </Button>
                 )}
             </Panel>
             <Users>
                 <span className="title">ADMIN</span>
-                <User username={game.admin.user.username} avatar={game.admin.user.avatar} displayOptions />
+                <User username={game.admin.user.username} avatar={game.admin.user.avatar} />
                 {game.queue.length > 0 &&
                     [...game.queue]
                         .sort((a, b) => b.score - a.score)

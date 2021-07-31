@@ -36,6 +36,7 @@ export class Hangman extends Game {
 
     reset() {
         this.state = new GameState()
+        this.hideWord()
         this.guesses = []
         this.misses = []
         this.queue.forEach(p => (p.score = 0))
@@ -79,6 +80,10 @@ export class Hangman extends Game {
 
     setWord(word: string | Word) {
         this.word = word instanceof Word ? word : new Word(word)
+    }
+
+    hideWord() {
+        this.word.letters.forEach(l => l.show(false))
     }
 
     revealWord() {
