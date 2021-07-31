@@ -81,7 +81,7 @@ export default (socket: Socket) => {
         const game = games[code]
 
         if (!game) return socket.emit('error', 'Game not found')
-        if (user.id !== game.creator.id) return
+        if (user.id !== game.admin.id) return
 
         game.state.started = true
 
