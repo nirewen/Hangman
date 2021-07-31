@@ -19,6 +19,7 @@ export const Header = styled.h1`
     text-transform: uppercase;
     padding: 2rem 0;
     justify-self: center;
+    text-align: center;
 `
 
 export const Letters = styled.div`
