@@ -94,7 +94,9 @@ export class Hangman extends Game {
     }
 
     hideWord() {
-        this.word.letters.forEach(l => l.show(false))
+        this.word.letters.forEach(l => {
+            if (l.letter !== '\u3000') l.show(false)
+        })
     }
 
     revealWord() {
