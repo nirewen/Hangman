@@ -134,6 +134,17 @@ export default (socket: Socket) => {
         io.to(code).emit('update', game)
     })
 
+    socket.on('request-admin', (code: string, user: IUser) => {
+        if (!user.id) return
+
+        const game = games[code]
+
+        if (!game) return socket.emit('error', 'Game not found')
+        if (user.id === game.admin.id || user.id === game.creator.id) return
+
+        socket.to(game.admin.socket).emit('message', `${user.username} wants to choose the word`)
+    })
+
     socket.on('disconnecting', () => {
         socket.rooms.forEach(code => {
             socket.leave(code)

@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom'
 import { Button, Tooltip } from '@chakra-ui/react'
 import api from 'services/api'
 
-import { IoTrash, IoInformationCircle, IoExit, IoEnter, IoSearch } from 'react-icons/io5'
+import { IoTrash, IoInformationCircle, IoExit, IoEnter, IoSearch, IoHandLeft } from 'react-icons/io5'
 import { FaPencilAlt } from 'react-icons/fa'
 import { RiVipCrown2Fill } from 'react-icons/ri'
 import { AiFillHome } from 'react-icons/ai'
@@ -48,6 +48,10 @@ const GameSidebar: React.FC = () => {
 
     const handlePhraseReveal = useCallback(() => {
         socket.emit('reveal-phrase', code, user)
+    }, [code, user, socket])
+
+    const handleRequestAdmin = useCallback(() => {
+        socket.emit('request-admin', code, user)
     }, [code, user, socket])
 
     return (
@@ -116,6 +120,20 @@ const GameSidebar: React.FC = () => {
                     >
                         Reveal
                     </Button>
+                )}
+
+                {game.admin.id !== user.id && (
+                    <Tooltip hasArrow placement="top" label="Request admin to chose the word">
+                        <Button
+                            colorScheme="cyan"
+                            size="sm"
+                            leftIcon={<IoHandLeft />}
+                            onClick={handleRequestAdmin}
+                            disabled={game.creator.id === user.id}
+                        >
+                            Request admin
+                        </Button>
+                    </Tooltip>
                 )}
             </Panel>
             <Users>
