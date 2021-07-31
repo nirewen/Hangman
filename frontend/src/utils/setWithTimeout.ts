@@ -1,9 +1,9 @@
 import { Dispatch, SetStateAction } from 'react'
 
-function setWithTimeout(value: any, update: Dispatch<SetStateAction<any>>, ms = 3000) {
+function setWithTimeout(value: any, update: Dispatch<SetStateAction<any>>, initialValue?: any, ms = 3000) {
     update(value)
 
-    setTimeout(() => update(null), ms)
+    setTimeout(() => update(initialValue), ms)
 }
 
 export default setWithTimeout

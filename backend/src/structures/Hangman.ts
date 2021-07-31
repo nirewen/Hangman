@@ -42,14 +42,6 @@ export class Hangman extends Game {
         this.queue.forEach(p => (p.score = 0))
     }
 
-    removePlayer(id: string) {
-        const player = this.queue.find(p => p.socket === id)
-
-        if (!player) return
-
-        this.queue.splice(this.queue.indexOf(player), 1)
-    }
-
     setAdmin(id: string) {
         const admin = this.admin
         const player = this.queue.find(p => p.id === id)
@@ -76,6 +68,25 @@ export class Hangman extends Game {
 
             return null
         }
+    }
+
+    removePlayer(id: string) {
+        const player = this.queue.find(p => p.socket === id)
+
+        if (!player) return
+
+        this.queue.splice(this.queue.indexOf(player), 1)
+    }
+
+    updateSocket(id: string, socket: string) {
+        if (id === this.creator.id) return (this.creator.socket = socket)
+        if (id === this.admin.id) return (this.admin.socket = socket)
+
+        const player = this.queue.find(p => p.id === id)
+
+        if (!player) return
+
+        player.socket = socket
     }
 
     setWord(word: string | Word) {

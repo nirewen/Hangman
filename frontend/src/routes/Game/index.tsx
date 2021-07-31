@@ -14,11 +14,10 @@ import HangmanContainer from 'components/@Game/HangmanContainer'
 import WordContainer from 'components/@Game/WordContainer'
 import GameContext from 'providers/Game'
 import GameMessageContext, { GameMessage } from 'providers/GameMessage'
-import { InternalState } from 'providers/GameState'
+import GameStateContext, { InternalState } from 'providers/GameState'
 import GameSidebar from 'components/@Game/GameSidebar'
 
 import { Container } from './styles'
-import GameStateContext from 'providers/GameState'
 
 const Game: React.FC = () => {
     const user = useUser()
@@ -65,7 +64,6 @@ const Game: React.FC = () => {
 
     socket.on('update', setGame)
     socket.on('delete', () => history.push('/'))
-    socket.on('message', (type, value) => setMessage!({ type, value }))
 
     if (!game) {
         if (message.type === 'error' && message.value === 'Game not found') return <Redirect to="/" />

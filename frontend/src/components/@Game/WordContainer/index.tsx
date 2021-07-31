@@ -7,22 +7,18 @@ import { ReactComponent as PartyPopper } from 'icons/PartyPopper.svg'
 import Letter from '../Letter'
 import Space from '../Space'
 
+import { useGameMessage } from 'providers/GameMessage'
+import setWithTimeout from 'utils/setWithTimeout'
+
 import { Container, LetterRow, State } from './styles'
 
 const WordContainer: React.FC = () => {
     const { game } = useGame()
+    const { message, setMessage } = useGameMessage()
     const socket = useSocket()
-    const [error, setError] = useState('')
-    const [message, setMessage] = useState('')
 
-    const setWithTimeout = (value: any, update: React.SetStateAction<any>, ms = 3000) => {
-        update(value)
-
-        setTimeout(() => update(null), ms)
-    }
-
-    socket.on('error', c => setWithTimeout(c, setError))
-    socket.on('message', c => setWithTimeout(c, setMessage))
+    socket.on('error', value => setWithTimeout({ type: 'error', value }, setMessage!, { type: '', message: '' }))
+    socket.on('message', c => setWithTimeout(c, setMessage!, { type: '', value: '' }))
 
     return (
         <Container>
@@ -32,8 +28,9 @@ const WordContainer: React.FC = () => {
                     GAME WON
                 </State>
             )}
-            {error && <State>{error}</State>}
-            {message && <State bg={[116, 60, 40]}>{message}</State>}
+            {message.type === 'error' && <State>{message.value}</State>}
+            {message.type === 'message' && <State bg={[116, 60, 40]}>{message.value}</State>}
+            {message.type === 'request' && <State bg={[42, 96, 47]}>{message.value}</State>}
             <LetterRow>
                 {game.word.letters.map((l, i) => {
                     if (l.letter === '\u3000') return <Space key={i} />

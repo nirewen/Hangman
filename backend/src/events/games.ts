@@ -14,6 +14,8 @@ export default (socket: Socket) => {
 
         if (!game) return socket.emit('error', 'Game not found')
 
+        game.updateSocket(user.id, socket.id)
+
         socket.join(code)
 
         io.to(code).emit('update', game)
@@ -111,8 +113,16 @@ export default (socket: Socket) => {
 
         const newPhrase = new Word(phrase)
 
-        if (newPhrase.word !== game.word.word) io.to(code).emit('message', 'Phrase updated')
-        else if (game.state.started) io.to(code).emit('message', 'Game reset')
+        if (newPhrase.word !== game.word.word)
+            io.to(code).emit('message', {
+                type: 'message',
+                value: 'Phrase updated',
+            })
+        else if (game.state.started)
+            io.to(code).emit('message', {
+                type: 'message',
+                value: 'Game reset',
+            })
 
         game.reset()
         game.setWord(newPhrase)
@@ -142,7 +152,10 @@ export default (socket: Socket) => {
         if (!game) return socket.emit('error', 'Game not found')
         if (user.id === game.admin.id || user.id === game.creator.id) return
 
-        socket.to(game.admin.socket).emit('message', `${user.username} wants to choose the word`)
+        socket.to(game.admin.socket).emit('message', {
+            type: 'request',
+            value: `${user.username} wants to choose the word`,
+        })
     })
 
     socket.on('disconnecting', () => {
@@ -180,7 +193,10 @@ export default (socket: Socket) => {
             if (game.queue.length < 2) {
                 game.state.started = false
 
-                io.to(code).emit('message', 'Game paused')
+                io.to(code).emit('message', {
+                    type: 'message',
+                    value: 'Game paused',
+                })
             }
 
             io.emit('refetch')

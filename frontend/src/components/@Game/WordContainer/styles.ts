@@ -31,7 +31,7 @@ export const State = styled.div<{ bg?: number[] }>`
     align-items: center;
     gap: 10px;
     padding: 0.75rem 1.5rem;
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     color: ${({ theme }) => theme.colors.text};
     background: hsl(var(--bg));
     font-weight: 700;
