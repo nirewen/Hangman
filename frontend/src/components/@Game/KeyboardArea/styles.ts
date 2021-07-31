@@ -19,7 +19,7 @@ export const Guesses = styled.div`
     padding: 0.7rem 2rem 1.4rem 2rem;
     margin-bottom: -1rem;
     border-radius: 1rem 1rem 0 0;
-    font-family: ${({ theme }) => theme.fonts.default};
+    font-family: ${({ theme }) => theme.fonts.secondary};
     color: ${({ theme }) => theme.colors.text};
     width: 748px;
     gap: 12px;
@@ -28,8 +28,12 @@ export const Guesses = styled.div`
     font-size: 1.5rem;
     height: 70px;
 
-    .wrong {
-        color: hsl(45, 100%, 50%);
+    span {
+        font-family: inherit;
+
+        &.wrong {
+            color: hsl(45, 100%, 50%);
+        }
     }
 `
 
@@ -41,7 +45,7 @@ interface Props {
 const current = ({ game: { state, queue, creator }, user }: Props, then: string, otherwise: string) => {
     const playing = queue[0]
 
-    if (!state.started || state.lost) {
+    if (!playing || !state.started || state.lost) {
         if (user.id === creator.id) {
             if (queue.length > 0) {
                 return otherwise
@@ -52,6 +56,8 @@ const current = ({ game: { state, queue, creator }, user }: Props, then: string,
             return otherwise
         }
     }
+
+    if (!playing) return otherwise
 
     if (playing.id !== user.id || state.win) {
         if (state.win) return otherwise

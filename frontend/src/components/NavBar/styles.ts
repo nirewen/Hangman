@@ -19,7 +19,7 @@ export const Container = styled.nav`
     }
 
     .game-name {
-        font-family: ${({ theme }) => theme.fonts.default};
+        font-family: ${({ theme }) => theme.fonts.secondary};
         font-size: 1.2rem;
     }
 `

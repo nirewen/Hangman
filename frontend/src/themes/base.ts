@@ -1,7 +1,8 @@
 const theme = {
     fonts: {
-        content: 'Roboto',
-        default: 'Rubik Mono One',
+        primary: 'Cabin',
+        secondary: 'Rubik Mono One',
+        title: 'Nunito Sans',
         mono: 'Roboto Mono',
     },
 }

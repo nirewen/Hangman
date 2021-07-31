@@ -44,7 +44,7 @@ export const Methods = styled.div`
 export const Heading = styled.h1`
     display: flex;
     font-size: 1.3rem;
-    font-family: ${({ theme }) => theme.fonts.default};
+    font-family: ${({ theme }) => theme.fonts.secondary};
     color: ${({ theme }) => theme.colors.text};
 `
 
@@ -77,7 +77,7 @@ export const Header = styled.h1`
     display: flex;
     flex-direction: column;
     grid-column: span 2;
-    font-family: ${({ theme }) => theme.fonts.default};
+    font-family: ${({ theme }) => theme.fonts.secondary};
     font-size: 3rem;
     text-align: center;
     color: ${({ theme }) => theme.colors.text};
@@ -92,22 +92,30 @@ export const Button = styled.h3`
     font-size: 1rem;
     padding: 1rem;
     background-color: ${({ theme }) => shade(0.1, theme.colors.primary)};
-    font-family: ${({ theme }) => theme.fonts.default};
+    font-family: ${({ theme }) => theme.fonts.title};
     color: ${({ theme }) => theme.colors.text};
     border-radius: 0.5rem;
+    font-weight: 800;
+    text-transform: uppercase;
 `
 
 export const Input = styled.input`
     font-size: 1rem;
     padding: 1rem;
     background-color: ${({ theme }) => shade(0.1, theme.colors.primary)};
-    font-family: ${({ theme }) => theme.fonts.default};
+    font-family: ${({ theme }) => theme.fonts.title};
     color: ${({ theme }) => theme.colors.text};
     border-radius: 0.5rem;
     max-width: calc(9ch + 2rem);
 
     &:focus {
         outline: none;
+    }
+
+    &::placeholder {
+        color: ${({ theme }) => theme.colors.text};
+        font-weight: 800;
+        text-transform: uppercase;
     }
 `
 

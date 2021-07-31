@@ -7,7 +7,7 @@ interface Props {
 export const Container = styled.div<Props>`
     padding: 1rem 1rem;
     line-height: 2rem;
-    font-family: ${({ theme }) => theme.fonts.default};
+    font-family: ${({ theme }) => theme.fonts.secondary};
     font-size: 2.25rem;
     font-weight: 400;
     color: ${({ theme }) => theme.colors.text};

@@ -12,8 +12,9 @@ declare module 'styled-components' {
         }
 
         fonts: {
-            content: string
-            default: string
+            primary: string
+            secondary: string
+            title: string
             mono: string
         }
     }

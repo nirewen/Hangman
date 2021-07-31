@@ -11,7 +11,7 @@ export const EmptyContent = styled.div`
 
     > span {
         color: ${({ theme }) => theme.colors.text};
-        font-family: ${({ theme }) => theme.fonts.content};
+        font-family: ${({ theme }) => theme.fonts.primary};
         font-size: 1.5rem;
     }
 
@@ -32,7 +32,7 @@ export const Container = styled.div`
 
     > span {
         color: ${({ theme }) => theme.colors.text};
-        font-family: ${({ theme }) => theme.fonts.content};
+        font-family: ${({ theme }) => theme.fonts.primary};
         font-size: 2rem;
     }
 

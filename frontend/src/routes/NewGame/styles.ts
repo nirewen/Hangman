@@ -12,7 +12,7 @@ export const Container = styled.div`
 `
 
 export const Header = styled.h1`
-    font-family: ${({ theme }) => theme.fonts.default};
+    font-family: ${({ theme }) => theme.fonts.secondary};
     font-size: 3rem;
     line-height: 1;
     color: #ffffff;
